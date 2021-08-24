@@ -1,18 +1,17 @@
 <template>
   <NavPage>
-    <template>
+    <template #default>
       <CurrentUsers :users="users"/>
       <v-row align="start" justify="center" class="align-self-start" no-gutters>
         <HeaderTitle>Угадай мелодию</HeaderTitle>
       </v-row>
       <v-row align="center"
              justify="center" class="align-self-start">
-        <v-col cols="11" sm="10" md="10" lg="4" xl="4">
-          <h3 class="text-h3" style="text-align: center">Отсканируйте с вашего смартфона чтобы начать</h3>
-          <v-row justify="center" no-gutters>
-            <QRCode value="не ну а че)"/>
-          </v-row>
-        </v-col>
+        <v-spacer/>
+        <BigFab @click="$router.push('/play/player')" text="Стать игроком"/>
+        <v-spacer/>
+        <BigFab @click="$router.push('/play/judge')" text="Стать ведущим"/>
+        <v-spacer/>
       </v-row>
     </template>
     <template #username>
@@ -23,13 +22,13 @@
 
 <script>
 import NavPage from "@/views/templates/NavPage";
-import QRCode from "@/components/QRCode";
 import HeaderTitle from "@/components/HeaderTitle";
 import CurrentUsers from "@/components/CurrentUsers";
+import BigFab from "@/components/BigFab";
 
 export default {
-  name: "CreateGame",
-  components: {CurrentUsers, HeaderTitle, QRCode, NavPage},
+  name: "ChooseRole",
+  components: {BigFab, CurrentUsers, HeaderTitle, NavPage},
   data: () => ({
     login: 'username stub',
     users: [
@@ -45,12 +44,13 @@ export default {
     setLogin(login) {
       this.login = login;
     }
+  },
+  mounted() {
+
   }
 }
 </script>
 
-<style lang="scss" scoped>
-.app {
+<style scoped>
 
-}
 </style>

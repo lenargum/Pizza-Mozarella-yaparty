@@ -5,13 +5,14 @@ import SpotifyLogin from "@/views/SpotifyLogin";
 import Login from "@/views/Login";
 import Home from "@/views/Home";
 import CreateGame from "@/views/CreateGame";
+import ChooseRole from "@/views/ChooseRole";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    component: CreateGame
+    component: ChooseRole
   },
   {
     path: '/create',
@@ -21,6 +22,22 @@ const routes = [
         path: 'room',
         name: 'CreateRoom',
         component: CreateRoom
+      },
+      {
+        path: 'game',
+        name: 'CreateGame',
+        component: CreateGame
+      }
+    ]
+  },
+  {
+    path: '/play',
+    children: [
+      {
+        path: 'player',
+      },
+      {
+        path: 'judge'
       }
     ]
   },

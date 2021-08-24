@@ -29,7 +29,7 @@
     </template>
 
     <template v-if="type==='text'">
-      <div class="text-h6">{{ text }}</div>
+      <div class="text-h8">{{ text }}</div>
     </template>
   </v-btn>
 </template>
