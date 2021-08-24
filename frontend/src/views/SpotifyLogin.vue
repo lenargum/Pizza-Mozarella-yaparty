@@ -2,7 +2,7 @@
   <NavPage>
     <template v-if="btnPressed===false">
       <v-row align="start" justify="center" class="align-self-start" no-gutters>
-        <Title>Подключение аккаунта Spotify</Title>
+        <HeaderTitle>Подключение аккаунта Spotify</HeaderTitle>
       </v-row>
       <v-row align="center"
              justify="center" class="align-self-start">
@@ -11,7 +11,7 @@
     </template>
     <template v-else-if="btnPressed===true && login===false">
       <v-row align="start" justify="center" class="align-self-start" no-gutters>
-        <Title>Вечеринка только для подключивших Spotify...</Title>
+        <HeaderTitle>Вечеринка только для подключивших Spotify...</HeaderTitle>
       </v-row>
       <v-row align="center"
              justify="center" class="align-self-start">
@@ -36,12 +36,12 @@
 <script>
 import NavPage from "@/views/templates/NavPage";
 import BigFab from "@/components/BigFab";
-import Title from "@/components/Title";
+import HeaderTitle from "@/components/HeaderTitle";
 import SmallFab from "@/components/SmallFab";
 
 export default {
   name: "SpotifyLogin",
-  components: {SmallFab, Title, BigFab, NavPage},
+  components: {SmallFab, HeaderTitle, BigFab, NavPage},
   data: () => ({
     login: false,
     btnPressed: false

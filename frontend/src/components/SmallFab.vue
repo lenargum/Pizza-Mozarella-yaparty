@@ -19,7 +19,7 @@
     </template>
 
     <template v-if="type==='forward'">
-      <div class="icon-wrapper">
+      <div class="icon-wrapper" style="margin-right: -12px">
         <svg width="71" height="71" viewBox="0 0 71 71" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M17.2754 12.1226L40.3489 35.1961L17.2754 58.2696L23.483 64.4772L52.764 35.1961L23.483 5.91504L17.2754 12.1226Z"

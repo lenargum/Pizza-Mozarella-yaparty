@@ -59,7 +59,7 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 0 40px;
+    padding: 0 0.02vw;
   }
 
   .drawer-wrapper {

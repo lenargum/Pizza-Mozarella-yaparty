@@ -8,7 +8,7 @@
     </template>
     <template v-else>
       <v-row align="start" justify="center" class="align-self-start" no-gutters>
-        <Title>Поделитесь с друзьями</Title>
+        <HeaderTitle>Поделитесь с друзьями</HeaderTitle>
       </v-row>
       <v-row align="center"
              justify="center" class="align-self-start">
@@ -28,11 +28,11 @@
 import NavPage from "@/views/templates/NavPage";
 import BigFab from "@/components/BigFab";
 import QRCode from "@/components/QRCode";
-import Title from "@/components/Title";
+import HeaderTitle from "@/components/HeaderTitle";
 
 export default {
   name: "CreateRoom",
-  components: {Title, QRCode, BigFab, NavPage},
+  components: {HeaderTitle, QRCode, BigFab, NavPage},
   data: () => ({
     btnPressed: false,
   }),
