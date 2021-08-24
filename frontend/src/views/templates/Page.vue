@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <v-app>
     <v-main>
       <slot name="default"/>
     </v-main>
-  </div>
+  </v-app>
 </template>
 
 <script>

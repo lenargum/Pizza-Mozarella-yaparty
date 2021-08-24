@@ -1,18 +1,26 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import CreateParty from "@/views/CreateParty";
+import CreateRoom from "@/views/CreateRoom";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    component: CreateParty
+    name: 'Home',
+    // component: () => import("@/views/Home.vue")
+    component: CreateRoom
   },
   {
-    path: '/create-party',
-    name: "CreateParty",
-    component: CreateParty
+    path: '/create',
+    component: CreateRoom,
+    children: [
+      {
+        path: 'room',
+        name: 'CreateRoom',
+        component: CreateRoom
+      }
+    ]
   },
 ];
 

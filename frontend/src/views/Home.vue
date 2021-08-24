@@ -8,7 +8,7 @@
 import NavPage from "@/views/templates/NavPage";
 
 export default {
-  name: "CreateParty",
+  name: "Home",
   components: {NavPage}
 }
 </script>

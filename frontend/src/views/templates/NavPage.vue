@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-app>
     <v-navigation-drawer v-if="hasDrawer"
                          v-model="drawer"
                          app
@@ -25,9 +25,11 @@
     </v-app-bar>
 
     <v-main>
-      <slot name="default"/>
+      <v-container fill-height fluid>
+        <slot name="default"/>
+      </v-container>
     </v-main>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -69,6 +71,11 @@ export default {
     gap: 10px;
 
     overflow-y: auto;
+  }
+
+  .page-wrapper {
+    height: 100vh;
+    width: 100vw;
   }
 }
 </style>
