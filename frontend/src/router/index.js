@@ -1,15 +1,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import CreateRoom from "@/views/CreateRoom";
+import SpotifyLogin from "@/views/SpotifyLogin";
+import Login from "@/views/Login";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    // component: () => import("@/views/Home.vue")
-    component: CreateRoom
+    component: SpotifyLogin
   },
   {
     path: '/create',
@@ -22,6 +22,16 @@ const routes = [
       }
     ]
   },
+  {
+    path: '/spotify',
+    name: 'SpotifyLogin',
+    component: SpotifyLogin
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  }
 ];
 
 const router = new VueRouter({
