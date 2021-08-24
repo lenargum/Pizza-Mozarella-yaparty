@@ -4,13 +4,14 @@ import CreateRoom from "@/views/CreateRoom";
 import SpotifyLogin from "@/views/SpotifyLogin";
 import Login from "@/views/Login";
 import Home from "@/views/Home";
+import CreateGame from "@/views/CreateGame";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    component: Login
+    component: CreateGame
   },
   {
     path: '/create',

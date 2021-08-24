@@ -54,6 +54,7 @@ export default {
 <style lang="scss" scoped>
 .app {
   .navbar-wrapper {
+    width: 100%;
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
