@@ -220,8 +220,8 @@ export default {
 
     padding-left: 10%;
     padding-top: 10%;
-    width: 40%;
-    height: 40%;
+    width: 45%;
+    height: 45%;
 
     text-align: left;
 

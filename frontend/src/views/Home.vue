@@ -8,14 +8,14 @@
         <!--        <Tile :label="'Угадай мелодию'" :img="'guess_the_melody'"/>-->
 
         <div @click="navigateToStub" class="page__service">
-          <Tile hoverable :label="'Афиша'" :img="'afisha'" :tile-color="'#FFCC00'"/>
+          <Tile :hoverable="true" :label="'Афиша'" :img="'afisha'" :tile-color="'#FFCC00'"/>
           <span class="page__service-text">
             Найдём мероприятие
           </span>
         </div>
 
         <div @click="$router.push('/playlist')" class="page__service">
-          <Tile hoverable :label="'Плейлист вечеринки'" :img="'party-playlist'"
+          <Tile :hoverable="true" :label="'Плейлист вечеринки'" :img="'party-playlist'"
                 :tile-color="'#6DAAE8'"/>
           <span class="page__service-text">
             Соберём плейлист
@@ -23,14 +23,14 @@
         </div>
 
         <div @click="navigateToStub" class="page__service">
-          <Tile :label="'Еда'" hoverable :img="'eda'" :tile-color="'#FFCC00'"/>
+          <Tile :hoverable="true" :label="'Еда'" :img="'eda'" :tile-color="'#FFCC00'"/>
           <span class="page__service-text">
             Организуем закуски
           </span>
         </div>
 
         <div @click="navigateToStub" class="page__service">
-          <Tile hoverable :label="'Кино'" :img="'kino'" :text-color="'#fff'"
+          <Tile :hoverable="true" :label="'Кино'" :img="'kino'" :text-color="'#fff'"
                 :tile-color="'#777'"/>
           <span class="page__service-text">
             Подскажем, что посмотреть
@@ -38,7 +38,7 @@
         </div>
 
         <div @click="$router.push('/games')" class="page__service">
-          <Tile hoverable :label="'Игры'" :img="'games'" :text-color="'#fff'"
+          <Tile :hoverable="true" :label="'Игры'" :img="'games'" :text-color="'#fff'"
                 :tile-color="'#FC3F1D'"/>
           <span class="page__service-text">
             Не дадим заскучать

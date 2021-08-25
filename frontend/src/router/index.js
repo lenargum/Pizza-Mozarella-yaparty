@@ -9,13 +9,15 @@ import ChooseRole from "@/views/ChooseRole";
 import Player from "@/views/Player";
 import Judge from "@/views/Judge";
 import Stub from "@/views/Stub";
+import MobileLogin from "@/views/MobileLogin";
+import Games from "@/views/Games";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    component: Home
+    component: Games
   },
   {
     path: '/create',
@@ -56,6 +58,11 @@ const routes = [
     component: Login
   },
   {
+    path: '/mobileLogin/:sessionId',
+    name: 'MobileLogin',
+    component: MobileLogin
+  },
+  {
     path: '/home',
     name: 'Home',
     component: Home
@@ -64,6 +71,11 @@ const routes = [
     path: '/in-progress',
     name: 'Stub',
     component: Stub
+  },
+  {
+    path: '/games',
+    name: 'Games',
+    component: Games
   },
   {
     path: '*',
