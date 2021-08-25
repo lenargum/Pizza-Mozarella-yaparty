@@ -1,45 +1,48 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import CreateRoom from "@/views/CreateRoom";
+import CreateRoom from "@/views/CreateRoom.vue";
 import SpotifyLogin from "@/views/SpotifyLogin";
 import Login from "@/views/Login";
 import Home from "@/views/Home";
 import CreateGame from "@/views/CreateGame";
 import ChooseRole from "@/views/ChooseRole";
+import Player from "@/views/Player";
+import Judge from "@/views/Judge";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    component: ChooseRole
+    component: Player
   },
   {
     path: '/create',
-    component: CreateRoom,
-    children: [
-      {
-        path: 'room',
-        name: 'CreateRoom',
-        component: CreateRoom
-      },
-      {
-        path: 'game',
-        name: 'CreateGame',
-        component: CreateGame
-      }
-    ]
+    redirect: '/create/room'
+  },
+  {
+    path: '/create/room',
+    name: 'CreateRoom',
+    component: CreateRoom
+  },
+  {
+    path: '/create/game',
+    name: 'CreateGame',
+    component: CreateGame
   },
   {
     path: '/play',
-    children: [
-      {
-        path: 'player',
-      },
-      {
-        path: 'judge'
-      }
-    ]
+    component: ChooseRole,
+  },
+  {
+    path: '/play/player',
+    name: 'Player',
+    component: Player
+  },
+  {
+    path: '/play/judge',
+    name: 'Judge',
+    component: Judge
   },
   {
     path: '/spotify',
@@ -55,7 +58,7 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: Home
-  }
+  },
 ];
 
 const router = new VueRouter({

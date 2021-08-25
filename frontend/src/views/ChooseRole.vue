@@ -1,34 +1,23 @@
 <template>
-  <NavPage>
-    <template #default>
-      <CurrentUsers :users="users"/>
-      <v-row align="start" justify="center" class="align-self-start" no-gutters>
-        <HeaderTitle>Угадай мелодию</HeaderTitle>
-      </v-row>
-      <v-row align="center"
-             justify="center" class="align-self-start">
-        <v-spacer/>
-        <BigFab @click="$router.push('/play/player')" text="Стать игроком"/>
-        <v-spacer/>
-        <BigFab @click="$router.push('/play/judge')" text="Стать ведущим"/>
-        <v-spacer/>
-      </v-row>
-    </template>
-    <template #username>
-      <div class="text-h4">{{ login }}</div>
-    </template>
+  <NavPage :username="login" :users="users" :header="'Угадай мелодию'">
+    <v-row align="center"
+           justify="center" class="align-self-start">
+      <v-spacer/>
+      <BigFab @click="$router.push('/player')" text="Стать игроком"/>
+      <v-spacer/>
+      <BigFab @click="$router.push('/judge')" text="Стать ведущим"/>
+      <v-spacer/>
+    </v-row>
   </NavPage>
 </template>
 
 <script>
 import NavPage from "@/views/templates/NavPage";
-import HeaderTitle from "@/components/HeaderTitle";
-import CurrentUsers from "@/components/CurrentUsers";
 import BigFab from "@/components/BigFab";
 
 export default {
   name: "ChooseRole",
-  components: {BigFab, CurrentUsers, HeaderTitle, NavPage},
+  components: {BigFab, NavPage},
   data: () => ({
     login: 'username stub',
     users: [

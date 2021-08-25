@@ -1,6 +1,5 @@
 <template>
-  <NavPage>
-    <h1 style="text-align: center">{{ $options.name }}</h1>
+  <NavPage :header="$options.name">
   </NavPage>
 </template>
 

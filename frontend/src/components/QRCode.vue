@@ -1,5 +1,8 @@
 <template>
-  <VueQrcode :value="value" :width="240"/>
+  <v-col cols="12" sm="11" md="11" lg="7" xl="5" :align-self="'center'" :align="'center'">
+    <VueQrcode class="qrcode__wrapper" :color="{ dark: '#222222', light: '#fff' }" :value="value" :width="240"/>
+  </v-col>
+
 </template>
 
 <script>
@@ -19,6 +22,5 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
 </style>

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer v-if="hasDrawer"
-                         v-model="drawer"
+                         v-model="drawerIsOpen"
                          app
     >
       <div class="drawer-wrapper">
@@ -11,22 +11,30 @@
         <Link v-for="(route, index) in $router.getRoutes()" :to="route.path" :key="index">
           {{ route.path }}
         </Link>
+        <hr style="width:100%">
+        <slot name="debug"/>
       </div>
     </v-navigation-drawer>
 
     <v-app-bar app>
-      <v-app-bar-nav-icon v-if="hasDrawer" @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon v-if="hasDrawer" @click="drawerIsOpen = !drawerIsOpen" title="Debug"/>
       <div class="navbar-wrapper">
         <Link to="/">
           <Logo/>
         </Link>
-        <slot name="username"/>
+        <template v-if="username">
+          <h5 class="text-h7 text-sm-h6 text-md-h6 text-lg-h5 text-xl-h4">{{ username }}</h5>
+        </template>
       </div>
     </v-app-bar>
 
     <v-main>
       <v-container fill-height fluid>
+        <CurrentUsers v-if="users" :users="users"/>
+        <Score v-if="score" :score="score"/>
+        <HeaderTitle v-if="header">{{ header }}</HeaderTitle>
         <slot name="default"/>
+
       </v-container>
     </v-main>
   </v-app>
@@ -35,19 +43,38 @@
 <script>
 import Link from "@/components/Link";
 import Logo from "@/components/Icons/Logo";
+import CurrentUsers from "@/components/CurrentUsers";
+import Score from "@/components/Score";
+import HeaderTitle from "@/components/HeaderTitle";
 
 export default {
   name: "NavPage",
-  components: {Logo, Link},
+  components: {HeaderTitle, Score, CurrentUsers, Logo, Link},
   props: {
-    hasDrawer: {
-      type: Boolean,
-      default: true
+    users: {
+      type: Array,
+      default: undefined
+    },
+    username: {
+      type: String,
+      default: undefined
+    },
+    score: {
+      type: String,
+      default: undefined
+    },
+    header: {
+      type: String,
+      default: undefined
     }
   },
   data: () => ({
-    drawer: false,
+    drawerIsOpen: false,
+    hasDrawer: false
   }),
+  mounted() {
+    this.hasDrawer = process.env.NODE_ENV === 'development';
+  }
 }
 </script>
 

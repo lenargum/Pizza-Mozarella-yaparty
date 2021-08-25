@@ -1,34 +1,34 @@
 <template>
   <NavPage>
-    <template v-if="btnPressed===false">
-      <v-row align="start" justify="center" class="align-self-start" no-gutters>
+    <template #default>
+      <template v-if="btnPressed===false">
         <HeaderTitle>Подключение аккаунта Spotify</HeaderTitle>
-      </v-row>
-      <v-row align="center"
-             justify="center" class="align-self-start">
-        <BigFab @click="_handleSpotifyConnect(); btnPressed=true" text="Войти"/>
-      </v-row>
-    </template>
-    <template v-else-if="btnPressed===true && login===false">
-      <v-row align="start" justify="center" class="align-self-start" no-gutters>
+        <v-row align="center"
+               justify="center" class="align-self-start">
+          <BigFab @click="_handleSpotifyConnect(); btnPressed=true" text="Войти"/>
+        </v-row>
+      </template>
+      <template v-else-if="btnPressed===true && loginIsOk===false">
         <HeaderTitle>Вечеринка только для подключивших Spotify...</HeaderTitle>
-      </v-row>
-      <v-row align="center"
-             justify="center" class="align-self-start">
-        <v-col cols="6">
-          <v-row justify="center" no-gutters>
-            <v-img
-              :src="require('../assets/closed.png')"
-              :max-height="491"
-              :max-width="491"
-            />
-          </v-row>
-          <v-row justify="center">
-            <SmallFab @click="btnPressed=false" type="back"/>
-            <SmallFab @click="$router.push('/login')" type="text" text="HACKS"/>
-          </v-row>
-        </v-col>
-      </v-row>
+        <v-row align="center"
+               justify="center" class="align-self-start">
+          <v-col cols="6">
+            <v-row justify="center" no-gutters>
+              <v-img
+                :src="require('../assets/closed.png')"
+                :max-height="491"
+                :max-width="491"
+              />
+            </v-row>
+            <v-row justify="center">
+              <SmallFab @click="btnPressed=false" type="back"/>
+            </v-row>
+          </v-col>
+        </v-row>
+      </template>
+    </template>
+    <template #debug>
+      <v-btn @click="loginIsOk=true" v-text="'Imitate Spotify login'"/>
     </template>
   </NavPage>
 </template>
@@ -43,14 +43,15 @@ export default {
   name: "SpotifyLogin",
   components: {SmallFab, HeaderTitle, BigFab, NavPage},
   data: () => ({
-    login: false,
+    loginIsOk: false,
     btnPressed: false
   }),
   methods: {
     _handleSpotifyConnect() {
-      if (this.btnPressed === true && this.login === false) {
+      if (this.btnPressed === true && this.loginIsOk === false) {
         // try connect
         // this.login = true;
+        this.$router.push('/login');
       }
     },
   }

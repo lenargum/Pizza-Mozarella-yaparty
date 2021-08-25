@@ -1,8 +1,5 @@
 <template>
-  <NavPage>
-    <v-row align="start" justify="center" class="align-self-start" no-gutters>
-      <HeaderTitle>Логин</HeaderTitle>
-    </v-row>
+  <NavPage :header="'Логин'" :username="username">
     <v-row
       justify="center" class="align-self-start">
       <v-col cols="11" sm="10" md="10" lg="4" xl="2" align-self="center">
@@ -26,11 +23,10 @@
 <script>
 import NavPage from "@/views/templates/NavPage";
 import SmallFab from "@/components/SmallFab";
-import HeaderTitle from "@/components/HeaderTitle";
 
 export default {
   name: "Login",
-  components: {HeaderTitle, SmallFab, NavPage},
+  components: {SmallFab, NavPage},
   data: () => ({
     username: ""
   }),
