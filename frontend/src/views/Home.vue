@@ -135,4 +135,12 @@ export default {
     }
   }
 }
+
+@media (max-device-width: 1000px) {
+  .page__wrapper {
+    background-image: none;
+    background-color: $style_black;
+    overflow-y: auto;
+  }
+}
 </style>

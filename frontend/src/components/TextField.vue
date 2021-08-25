@@ -13,16 +13,16 @@
 <style lang="scss">
 .app {
   .v-input {
-    font-size: 1.5rem !important;
+    font-size: 1.5em !important;
   }
 
   .v-label {
-    font-size: 1.5rem !important;
+    font-size: 1.5em !important;
     padding: 0 20px;
   }
 
   .v-icon {
-    font-size: 2.5rem !important;
+    font-size: 2.5em !important;
   }
 }
 </style>
