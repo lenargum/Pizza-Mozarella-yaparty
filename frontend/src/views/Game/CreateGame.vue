@@ -34,26 +34,12 @@ export default {
   name: "CreateGame",
   components: {SmallFab, QRCode, NavPage},
   data: () => ({
-    login: 'username stub',
-    users: [
-      'stub1',
-      'stub2'
-    ],
     btnPressed: false,
     qrcodeValue: "не ну а че)",
     localPath: '',
     loading: true,
   }),
   methods: {
-    setUsers(users) {
-      this.users = users;
-    },
-    setLogin(login) {
-      this.login = login;
-    },
-    setQrcode(value) {
-      this.qrcodeValue = value;
-    },
     nextPageBtnHandler() {
       this.$router.push(this.localPath);
     }
