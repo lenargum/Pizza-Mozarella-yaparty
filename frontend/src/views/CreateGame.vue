@@ -2,7 +2,7 @@
   <NavPage :username="login" :users="users" :header="'Угадай мелодию'">
     <v-row align="center"
            justify="center" class="align-self-start">
-      <v-col cols="11" sm="10" md="10" lg="4" xl="4">
+      <v-col cols="11" sm="10" md="10" lg="7" xl="7">
         <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">Отсканируйте с вашего
           смартфона чтобы начать</h3>
         <v-row justify="center" align="center" no-gutters>

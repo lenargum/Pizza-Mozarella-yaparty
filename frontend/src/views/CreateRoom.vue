@@ -11,7 +11,7 @@
         <HeaderTitle>Поделитесь с друзьями</HeaderTitle>
         <v-row align="center"
                justify="center" class="align-self-start">
-          <v-col cols="11" sm="10" md="10" lg="4" xl="4">
+          <v-col cols="11" sm="10" md="10" lg="7" xl="7">
             <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">Позвольте друзьям
               отсканировать QR-код чтобы присоединиться к
               комнате</h3>
