@@ -6,7 +6,7 @@
     :height="100"
     :width="100"
     @click="$emit('click')"
-    :color="type==='back'? '#6DAAE8' : type==='forward'? '#FFCC00' : undefined"
+    :color="type==='back'? '#6DAAE8' : type==='forward'? '#FFCC00' : type==='check'? '#4CAF50' : type==='cross'? '#FC3F1D': undefined"
   >
     <template v-if="type==='back'">
       <div class="icon-wrapper" style="margin-left: -12px">
@@ -28,6 +28,26 @@
       </div>
     </template>
 
+    <template v-if="type==='check'">
+      <div class="icon-wrapper">
+        <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M25.5032 45.7262L13.9652 34.1881L10.0361 38.0895L25.5032 53.5566L58.7063 20.3535L54.805 16.4521L25.5032 45.7262Z"
+            fill="white"/>
+        </svg>
+      </div>
+    </template>
+
+    <template v-if="type==='cross'">
+      <div class="icon-wrapper">
+        <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M53.173 18.3379L49.2716 14.4365L33.8045 29.9036L18.3374 14.4365L14.436 18.3379L29.9031 33.805L14.436 49.2721L18.3374 53.1735L33.8045 37.7064L49.2716 53.1735L53.173 49.2721L37.7059 33.805L53.173 18.3379Z"
+            fill="white"/>
+        </svg>
+      </div>
+    </template>
+
     <template v-if="type==='text'">
       <div class="text-h8">{{ text }}</div>
     </template>
@@ -39,7 +59,7 @@ export default {
   name: "SmallFab",
   props: {
     type: {
-      // back, forward, text
+      // back, forward, check, cross, text
       type: String,
       default: ''
     },

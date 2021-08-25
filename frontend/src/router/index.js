@@ -12,13 +12,14 @@ import Stub from "@/views/Stub";
 import MobileLogin from "@/views/MobileLogin";
 import Games from "@/views/Games";
 import Playlist from "@/views/Playlist";
+import LeaderBoard from "@/views/LeaderBoard";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    component: Playlist
+    component: Home
   },
   {
     path: '/create',
@@ -82,6 +83,11 @@ const routes = [
     path: '/playlist',
     name: 'Playlist',
     component: Playlist
+  },
+  {
+    path: '/leaderboard',
+    name: 'LeaderBoard',
+    component: LeaderBoard
   },
   {
     path: '*',

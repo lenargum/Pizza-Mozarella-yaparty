@@ -49,14 +49,15 @@
         <v-row align="center"
                justify="center" class="align-self-start">
           <div class="input-wrapper">
-            <SmallFab @click="declineAnswer" type="text" text="-"/>
+
+            <SmallFab @click="declineAnswer" type="check"/>
             <v-text-field
               disabled
               :height="100"
               solo
               :value="givenAnswer"
             />
-            <SmallFab @click="acceptAnswer" type="text" text="+"/>
+            <SmallFab @click="acceptAnswer" type="cross"/>
           </div>
         </v-row>
       </template>

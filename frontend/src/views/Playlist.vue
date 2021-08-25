@@ -21,6 +21,9 @@
         <template #item.duration_ms="{item}">
           {{ millisToMinutesAndSeconds(item.duration_ms) }}
         </template>
+        <template #item.artists="{item}">
+          {{ item.artists.toString() }}
+        </template>
       </v-data-table>
     </v-row>
   </NavPage>
@@ -224,7 +227,6 @@ export default {
   }),
   methods: {
     millisToMinutesAndSeconds(millis) {
-      console.log(millis);
       const minutes = Math.floor(millis / 60000);
       const seconds = ((millis % 60000) / 1000).toFixed(0);
       return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
