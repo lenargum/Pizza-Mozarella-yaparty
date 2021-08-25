@@ -195,12 +195,14 @@ export default {
   min-width: 200px;
 
   &__bg {
-    transition: top 1s ease-in-out, left 1s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out;
+    transition: top 0.5s ease-in-out, left 0.5s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out;
 
     position: relative;
     width: 200px;
     height: 200px;
     filter: drop-shadow(0px 8.19231px 8.19231px rgba(0, 0, 0, 0.161));
+    top: 0;
+    left: 0;
 
     &:hover {
       width: var(--width);
