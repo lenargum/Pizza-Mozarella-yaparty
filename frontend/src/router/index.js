@@ -8,13 +8,14 @@ import CreateGame from "@/views/CreateGame";
 import ChooseRole from "@/views/ChooseRole";
 import Player from "@/views/Player";
 import Judge from "@/views/Judge";
+import Stub from "@/views/Stub";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    component: Player
+    component: Home
   },
   {
     path: '/create',
@@ -59,6 +60,15 @@ const routes = [
     name: 'Home',
     component: Home
   },
+  {
+    path: '/in-progress',
+    name: 'Stub',
+    component: Stub
+  },
+  {
+    path: '*',
+    redirect: '/in-progress'
+  }
 ];
 
 const router = new VueRouter({

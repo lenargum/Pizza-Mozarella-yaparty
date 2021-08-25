@@ -121,9 +121,11 @@ export default {
       if (answerCorrect) {
         this.setState("answered");
       }
+      this.givenAnswer = "";
     }
 
     //answered
+
 
     //waiting
 

@@ -80,6 +80,10 @@ export default {
 
 <style lang="scss" scoped>
 .app {
+  .v-sheet.v-app-bar {
+    box-shadow: none !important;
+  }
+
   .navbar-wrapper {
     width: 100%;
     display: flex;
