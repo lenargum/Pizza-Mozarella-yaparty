@@ -10,7 +10,6 @@
         :disable-filtering="true"
         :disable-sort="true"
         :hide-default-footer="true"
-        :height="'70vh'"
         :fixed-header="true"
       >
         <template #item.track_cover="{item}">
@@ -247,6 +246,7 @@ export default {
   .playlist__table {
     margin: 10px;
     width: 50vw;
+    max-height: 70vh;
   }
 }
 </style>
