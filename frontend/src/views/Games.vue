@@ -5,18 +5,30 @@
         Ваша библиотека
       </h2>
       <div class="games__tiles">
-        <Tile @click="$router.push('/create/game')" class="games__tile" :hoverable="true" :label="'Угадай мелодию'"
-              :img="'guess_the_melody'"/>
-        <Tile class="games__tile" :hoverable="true" :label="'Игра 2'"/>
-        <Tile class="games__tile" :hoverable="true" :label="'Игра 3'"/>
+        <div @click="$router.push('/create/game')" class="games__tile">
+          <Tile :hoverable="true" :label="'Угадай мелодию'"
+                :img="'guess_the_melody'"/>
+        </div>
+        <div class="games__tile">
+          <Tile :hoverable="true" :label="'Игра 2'"/>
+        </div>
+        <div class="games__tile">
+          <Tile class="games__tile" :hoverable="true" :label="'Игра 3'"/>
+        </div>
       </div>
       <h2 class="games__title text-h4 text-sm-h3 text-md-h2 text-lg-h2 text-xl-h1">
         Маркет
       </h2>
       <div class="games__tiles">
-        <Tile class="games__tile" :hoverable="true" :label="'Игра 4'" tile-color="#FC3F1D" text-color="#fff"/>
-        <Tile class="games__tile" :hoverable="true" :label="'Игра 5'" tile-color="#FC3F1D" text-color="#fff"/>
-        <Tile class="games__tile" :hoverable="true" :label="'Игра 6'" tile-color="#FC3F1D" text-color="#fff"/>
+        <div class="games__tile">
+          <Tile class="games__tile" :hoverable="true" :label="'Игра 4'" tile-color="#FC3F1D" text-color="#fff"/>
+        </div>
+        <div class="games__tile">
+          <Tile class="games__tile" :hoverable="true" :label="'Игра 5'" tile-color="#FC3F1D" text-color="#fff"/>
+        </div>
+        <div class="games__tile">
+          <Tile class="games__tile" :hoverable="true" :label="'Игра 6'" tile-color="#FC3F1D" text-color="#fff"/>
+        </div>
       </div>
     </div>
   </NavPage>
@@ -53,6 +65,7 @@ export default {
 
   &__tile {
     cursor: pointer;
+    user-select: none;
   }
 }
 
