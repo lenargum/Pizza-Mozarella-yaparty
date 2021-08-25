@@ -4,16 +4,16 @@ import CreateRoom from "@/views/CreateRoom.vue";
 import SpotifyLogin from "@/views/SpotifyLogin";
 import Login from "@/views/Login";
 import Home from "@/views/Home";
-import CreateGame from "@/views/CreateGame";
-import ChooseRole from "@/views/ChooseRole";
-import Player from "@/views/Player";
-import Judge from "@/views/Judge";
+import CreateGame from "@/views/Game/CreateGame";
+import ChooseRole from "@/views/Game/ChooseRole";
+import Player from "@/views/Game/Player";
+import Judge from "@/views/Game/Judge";
 import Stub from "@/views/Stub";
-import MobileLogin from "@/views/MobileLogin";
+import MobileLogin from "@/views/Game/MobileLogin";
 import Games from "@/views/Games";
 import Playlist from "@/views/Playlist";
-import LeaderBoard from "@/views/LeaderBoard";
-import PlayMusic from "@/views/PlayMusic";
+import LeaderBoard from "@/views/Game/LeaderBoard";
+import PlayMusic from "@/views/Game/PlayMusic";
 
 Vue.use(VueRouter);
 
