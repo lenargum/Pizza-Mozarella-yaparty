@@ -1,8 +1,8 @@
 <template>
   <div class="stub">
     <div class="stub_imgs">
-      <img class="stub__img" :src="require('@/assets/stub.jpg')" alt="">
-      <img class="stub__img stub__img_2" height="" :src="require('@/assets/stub2.jpg')" alt="">
+      <img @click="$router.back()" class="stub__img" :src="require('@/assets/stub.jpg')" alt="">
+      <img @click="$router.back()" class="stub__img stub__img_2" height="" :src="require('@/assets/stub2.jpg')" alt="">
     </div>
     <div class="stub__label">В разработке</div>
   </div>

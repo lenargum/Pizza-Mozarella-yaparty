@@ -1,9 +1,14 @@
 <template>
   <div class="tile">
-    <div class="tile__bg" :style="{backgroundColor: tileColor}">
-      <div class="tile__label" :style="{color: textColor}">
-        {{ label }}
-      </div>
+    <div class="tile__bg"
+         :style="{
+      backgroundColor: tileColor,
+      '--width': hoverable? '210px' : '200px',
+      '--height': hoverable? '210px' : '200px',
+      '--top': hoverable? '-5px' : '0',
+      '--left': hoverable? '-5px' : '0',
+    }">
+      <div class="tile__label" :style="{color: textColor}">{{ label }}</div>
       <div class="tile__img">
         <template v-if="img==='guess_the_melody'">
           <svg
@@ -178,11 +183,15 @@ export default {
       type: String,
       default: '#FFCC00'
     },
+    hoverable: {
+      type: Boolean,
+      default: false
+    }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .tile {
 
 
@@ -198,6 +207,13 @@ export default {
     width: 200px;
     height: 200px;
     filter: drop-shadow(0px 8.19231px 8.19231px rgba(0, 0, 0, 0.161));
+
+    .tile__bg:hover {
+      width: var(--width);
+      height: var(--height);
+      top: var(--top);
+      left: var(--left);
+    }
   }
 
   &__label {
@@ -210,6 +226,8 @@ export default {
     padding-top: 10%;
     width: 40%;
     height: 40%;
+
+    text-align: left;
 
     user-select: none;
   }

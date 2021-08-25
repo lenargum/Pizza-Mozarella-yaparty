@@ -8,36 +8,37 @@
         <!--        <Tile :label="'Угадай мелодию'" :img="'guess_the_melody'"/>-->
 
         <div class="page__service">
-          <Tile @click="navigateToStub" :label="'Афиша'" :img="'afisha'" :tile-color="'#FFCC00'"/>
+          <Tile @click="navigateToStub" hoverable :label="'Афиша'" :img="'afisha'" :tile-color="'#FFCC00'"/>
           <span class="page__service-text">
             Найдём мероприятие
           </span>
         </div>
 
         <div class="page__service">
-          <Tile @click="$router.push('/playlist')" :label="'Плейлист вечеринки'" :img="'party-playlist'"
+          <Tile @click="$router.push('/playlist')" hoverable :label="'Плейлист вечеринки'" :img="'party-playlist'"
                 :tile-color="'#6DAAE8'"/>
           <span class="page__service-text">
             Соберём плейлист
           </span>
         </div>
 
-        <div @click="navigateToStub" class="page__service">
-          <Tile :label="'Еда'" :img="'eda'" :tile-color="'#FFCC00'"/>
+        <div class="page__service">
+          <Tile @click="navigateToStub" :label="'Еда'" hoverable :img="'eda'" :tile-color="'#FFCC00'"/>
           <span class="page__service-text">
             Организуем закуски
           </span>
         </div>
 
         <div class="page__service">
-          <Tile @click="navigateToStub" :label="'Кино'" :img="'kino'" :text-color="'#fff'" :tile-color="'#777'"/>
+          <Tile @click="navigateToStub" hoverable :label="'Кино'" :img="'kino'" :text-color="'#fff'"
+                :tile-color="'#777'"/>
           <span class="page__service-text">
             Подскажем, что посмотреть
           </span>
         </div>
 
         <div class="page__service">
-          <Tile @click="$router.push('/games')" :label="'Игры'" :img="'games'" :text-color="'#fff'"
+          <Tile @click="$router.push('/games')" hoverable :label="'Игры'" :img="'games'" :text-color="'#fff'"
                 :tile-color="'#FC3F1D'"/>
           <span class="page__service-text">
             Не дадим заскучать
@@ -64,14 +65,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.tile__bg:hover {
-  width: 210px;
-  height: 210px;
-  top: -5px;
-  left: -5px;
-}
-
+<style lang="scss" scoped>
 .page {
   &__wrapper {
     position: relative;

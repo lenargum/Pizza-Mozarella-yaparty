@@ -51,7 +51,10 @@
       </template>
 
       <template v-if="state==='answered'">
-
+        <v-row align="center"
+               justify="center" class="align-self-start">
+          <FlipCard :artist="artist" :track="track"/>
+        </v-row>
       </template>
 
       <template v-if="state==='waiting'">
@@ -72,10 +75,11 @@ import NavPage from "@/views/templates/NavPage";
 import BigFab from "@/components/BigFab";
 import SmallFab from "@/components/SmallFab";
 import TextField from "@/components/TextField";
+import FlipCard from "@/components/FlipCard";
 
 export default {
   name: "Player",
-  components: {TextField, SmallFab, BigFab, NavPage},
+  components: {FlipCard, TextField, SmallFab, BigFab, NavPage},
   data: () => ({
     login: 'username stub',
     users: [
@@ -87,7 +91,9 @@ export default {
     states: ["starting", "ready", "answering", "answered", "waiting", "waited"],
     // starting, ready, answering, answered, waiting, waited
 
-    givenAnswer: '',
+    givenAnswer: 'пошлая молли',
+    track: 'Новый мерин',
+    artist: 'Моргенштерн',
   }),
   methods: {
     setUsers(users) {
