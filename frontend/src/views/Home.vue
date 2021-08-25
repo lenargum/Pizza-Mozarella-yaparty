@@ -12,7 +12,7 @@
           </span>
         </div>
 
-        <div @click="roomId? navigateToCreateRoom : $router.push('/playlist/'+roomId)" class="page__service">
+        <div @click="roomId? $router.push('/playlist/'+roomId) : navigateToCreateRoom()" class="page__service">
           <Tile :hoverable="true" :label="'Плейлист вечеринки'" :img="'party-playlist'"
                 :tile-color="'#6DAAE8'"/>
           <span class="page__service-text">
@@ -35,7 +35,7 @@
           </span>
         </div>
 
-        <div @click="roomId? navigateToCreateRoom : $router.push('/games')" class="page__service">
+        <div @click="$router.push('/games')" class="page__service">
           <Tile :hoverable="true" :label="'Игры'" :img="'games'" :text-color="'#fff'"
                 :tile-color="'#FC3F1D'"/>
           <span class="page__service-text">
@@ -63,7 +63,7 @@ export default {
       this.$router.push('/in-progress');
     },
     navigateToCreateRoom() {
-      this.$router.push('/room/create');
+      this.$router.push('/create/room');
     }
   },
   mounted() {
