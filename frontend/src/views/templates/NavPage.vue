@@ -73,7 +73,6 @@ export default {
     hasDrawer: false
   }),
   mounted() {
-    this.hasDrawer = process.env.NODE_ENV === 'development';
   }
 }
 </script>
