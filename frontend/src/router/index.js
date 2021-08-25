@@ -20,7 +20,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    component: PlayMusic
+    component: Home
   },
   {
     path: '/create',

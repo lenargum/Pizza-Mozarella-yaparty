@@ -11,6 +11,7 @@
         :disable-sort="true"
         :hide-default-footer="true"
         :fixed-header="true"
+        :height="'70vh'"
       >
         <template #item.track_cover="{item}">
           <div class="cover-wrapper" :style="{width: 32, height: 32}">
@@ -232,18 +233,17 @@ export default {
       return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
     }
   },
-  async created() {
-    this.roomId = this.$route.params.id;
+   async created() {
+     this.roomId = this.$route.params.id;
 
-    const requestOptions = {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-    };
-    const response = await fetch("https://secure-ridge-64426.herokuapp.com/http://84.201.167.68:8000/recommend?room_id=" + this.roomId + "&size=5", requestOptions);
-    const data = await response.json();
-    this.tableData = data;
-  }
-
+     const requestOptions = {
+       method: "GET",
+       headers: { "Content-Type": "application/json" },
+     };
+     const response = await fetch("https://secure-ridge-64426.herokuapp.com/http://84.201.167.68:8000/recommend?room_id="+this.roomId+"&size=30", requestOptions);
+     const data = await response.json();
+     this.tableData = data;
+   }
 }
 </script>
 
@@ -258,7 +258,6 @@ export default {
   .playlist__table {
     margin: 10px;
     width: 50vw;
-    max-height: 70vh;
   }
 }
 </style>

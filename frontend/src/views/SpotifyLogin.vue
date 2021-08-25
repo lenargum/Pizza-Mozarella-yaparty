@@ -52,8 +52,9 @@ export default {
       if (this.btnPressed === true && this.loginIsOk === false) {
 
 
+
         // this.login = true;
-        this.$router.push('/home/' + this.roomId);
+        this.$router.push('/home/'+this.roomId);
       }
     },
   },

@@ -16,7 +16,10 @@
               отсканировать QR-код чтобы присоединиться к
               комнате</h3>
             <v-row justify="center" no-gutters>
-              <QRCode :value="qrcodeValue"/>
+              <QRCode :value="link"/>
+            </v-row>
+            <v-row justify="center" no-gutters>
+              <SmallFab type="forward" @click="$router.push('/home/'+qrcodeValue)"></SmallFab>
             </v-row>
           </v-col>
         </v-row>
@@ -30,28 +33,34 @@ import NavPage from "@/views/templates/NavPage";
 import BigFab from "@/components/BigFab";
 import QRCode from "@/components/QRCode";
 import HeaderTitle from "@/components/HeaderTitle";
+import SmallFab from "@/components/SmallFab";
 
 export default {
   name: "CreateRoom",
-  components: {HeaderTitle, QRCode, BigFab, NavPage},
+  components: {HeaderTitle, QRCode, BigFab, NavPage, SmallFab},
   data: () => ({
     btnPressed: false,
     qrcodeValue: undefined,
     link: "",
+
+    temp: "this.$router.push('/home/'+this.roomId);"
   }),
   methods: {
     setQrcode(value) {
       this.qrcodeValue = value;
     },
-    async btnHandler() {
+    async btnHandler(){
       const requestOptions = {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
       };
-      const response = await fetch("https://secure-ridge-64426.herokuapp.com/http://84.201.167.68:8000/room/create", requestOptions);
+      const response = await fetch("https://secure-ridge-64426.herokuapp.com/http://84.201.167.68:4000/room/create", requestOptions);
+      console.log(response);
       const data = await response.json();
-      this.qrcodeValue = data.session_id;
-      this.btnPressed = true;
+      console.log(data);
+      console.log(data.room_id);
+      this.qrcodeValue = data.room_id;
+      this.btnPressed=true;
 
       this.link = "http://84.201.167.68:5000/login?room_id=" + this.qrcodeValue;
     }
