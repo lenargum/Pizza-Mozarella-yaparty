@@ -12,6 +12,8 @@
         :hide-default-footer="true"
         :fixed-header="true"
         :height="'70vh'"
+        :loading="loading"
+        loading-text="Загрузка..."
       >
         <template #item.track_cover="{item}">
           <div class="cover-wrapper" :style="{width: 32, height: 32}">
@@ -42,189 +44,9 @@ export default {
       {text: 'Исполнитель', value: 'artists'},
       {text: 'Длительность', value: 'duration_ms'},
     ],
-    tableData: [
-      {
-        "track_name": "Another World",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d0000485163ef64fbbaed7ae560aae0a5",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 271807,
-        "artists": [
-          "plenka"
-        ]
-      },
-      {
-        "track_name": "Тайна",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d000048518c00a9564293be7d830a43e0",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 181510,
-        "artists": [
-          "Увула"
-        ]
-      },
-      {
-        "track_name": "Marimba",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d0000485162f4a39c436a0cc45b727946",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 204096,
-        "artists": [
-          "Julian Lamadrid"
-        ]
-      },
-      {
-        "track_name": "Jiraiya",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d0000485172dac1e81cc55f1dd99fff73",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 178673,
-        "artists": [
-          "NKOHA"
-        ]
-      },
-      {
-        "track_name": "Родной",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d00004851c642f3a5b5cb6f1b5fb62285",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 218332,
-        "artists": [
-          "Чёрный Государь"
-        ]
-      },
-      {
-        "track_name": "Another World",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d0000485163ef64fbbaed7ae560aae0a5",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 271807,
-        "artists": [
-          "plenka"
-        ]
-      },
-      {
-        "track_name": "Тайна",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d000048518c00a9564293be7d830a43e0",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 181510,
-        "artists": [
-          "Увула"
-        ]
-      },
-      {
-        "track_name": "Marimba",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d0000485162f4a39c436a0cc45b727946",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 204096,
-        "artists": [
-          "Julian Lamadrid"
-        ]
-      },
-      {
-        "track_name": "Jiraiya",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d0000485172dac1e81cc55f1dd99fff73",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 178673,
-        "artists": [
-          "NKOHA"
-        ]
-      },
-      {
-        "track_name": "Родной",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d00004851c642f3a5b5cb6f1b5fb62285",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 218332,
-        "artists": [
-          "Чёрный Государь"
-        ]
-      },
-      {
-        "track_name": "Another World",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d0000485163ef64fbbaed7ae560aae0a5",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 271807,
-        "artists": [
-          "plenka"
-        ]
-      },
-      {
-        "track_name": "Тайна",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d000048518c00a9564293be7d830a43e0",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 181510,
-        "artists": [
-          "Увула"
-        ]
-      },
-      {
-        "track_name": "Marimba",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d0000485162f4a39c436a0cc45b727946",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 204096,
-        "artists": [
-          "Julian Lamadrid"
-        ]
-      },
-      {
-        "track_name": "Jiraiya",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d0000485172dac1e81cc55f1dd99fff73",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 178673,
-        "artists": [
-          "NKOHA"
-        ]
-      },
-      {
-        "track_name": "Родной",
-        "track_cover": {
-          "url": "https://i.scdn.co/image/ab67616d00004851c642f3a5b5cb6f1b5fb62285",
-          "height": 64,
-          "width": 64
-        },
-        "duration_ms": 218332,
-        "artists": [
-          "Чёрный Государь"
-        ]
-      }
-    ],
-    roomId: ''
+    tableData: [],
+    roomId: '',
+    loading: true
   }),
   methods: {
     millisToMinutesAndSeconds(millis) {
@@ -238,11 +60,17 @@ export default {
 
      const requestOptions = {
        method: "GET",
-       headers: { "Content-Type": "application/json" },
+       headers: {"Content-Type": "application/json"},
      };
-     const response = await fetch("https://secure-ridge-64426.herokuapp.com/http://84.201.167.68:8000/recommend?room_id="+this.roomId+"&size=30", requestOptions);
-     const data = await response.json();
-     this.tableData = data;
+     try {
+       const response = await fetch("https://secure-ridge-64426.herokuapp.com/http://84.201.167.68:8000/recommend?room_id=" + this.roomId + "&size=30", requestOptions);
+       const data = await response.json();
+       this.tableData = data;
+       this.loading = false;
+     } catch (e) {
+       this.loading = false;
+     }
+
    }
 }
 </script>
