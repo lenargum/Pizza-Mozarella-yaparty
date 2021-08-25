@@ -44,16 +44,21 @@ export default {
   components: {SmallFab, HeaderTitle, BigFab, NavPage},
   data: () => ({
     loginIsOk: false,
-    btnPressed: false
+    btnPressed: false,
+    roomId: ''
   }),
   methods: {
     _handleSpotifyConnect() {
       if (this.btnPressed === true && this.loginIsOk === false) {
-        // try connect
+
+
         // this.login = true;
-        this.$router.push('/login');
+        this.$router.push('/home/' + this.roomId);
       }
     },
+  },
+  mounted() {
+    this.roomId = this.$route.params.id;
   }
 }
 </script>

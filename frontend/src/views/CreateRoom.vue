@@ -4,7 +4,7 @@
       <template v-if="!btnPressed">
         <v-row align="center"
                justify="center">
-          <BigFab @click="btnPressed=true" text="Создать комнату"/>
+          <BigFab @click="btnHandler" text="Создать комнату"/>
         </v-row>
       </template>
       <template v-else>
@@ -36,11 +36,24 @@ export default {
   components: {HeaderTitle, QRCode, BigFab, NavPage},
   data: () => ({
     btnPressed: false,
-    qrcodeValue: "не ну а че)"
+    qrcodeValue: undefined,
+    link: "",
   }),
   methods: {
     setQrcode(value) {
       this.qrcodeValue = value;
+    },
+    async btnHandler() {
+      const requestOptions = {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+      };
+      const response = await fetch("https://secure-ridge-64426.herokuapp.com/http://84.201.167.68:8000/room/create", requestOptions);
+      const data = await response.json();
+      this.qrcodeValue = data.session_id;
+      this.btnPressed = true;
+
+      this.link = "http://84.201.167.68:5000/login?room_id=" + this.qrcodeValue;
     }
   }
 }

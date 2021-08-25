@@ -222,7 +222,8 @@ export default {
           "Чёрный Государь"
         ]
       }
-    ]
+    ],
+    roomId: ''
   }),
   methods: {
     millisToMinutesAndSeconds(millis) {
@@ -230,6 +231,17 @@ export default {
       const seconds = ((millis % 60000) / 1000).toFixed(0);
       return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
     }
+  },
+  async created() {
+    this.roomId = this.$route.params.id;
+
+    const requestOptions = {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+    };
+    const response = await fetch("https://secure-ridge-64426.herokuapp.com/http://84.201.167.68:8000/recommend?room_id=" + this.roomId + "&size=5", requestOptions);
+    const data = await response.json();
+    this.tableData = data;
   }
 
 }

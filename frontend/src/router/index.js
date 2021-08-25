@@ -51,7 +51,7 @@ const routes = [
     component: Judge
   },
   {
-    path: '/spotify',
+    path: '/spotify/:id',
     name: 'SpotifyLogin',
     component: SpotifyLogin
   },
@@ -66,7 +66,7 @@ const routes = [
     component: MobileLogin
   },
   {
-    path: '/home',
+    path: '/home/:id',
     name: 'Home',
     component: Home
   },
@@ -81,7 +81,7 @@ const routes = [
     component: Games
   },
   {
-    path: '/playlist',
+    path: '/playlist/:id',
     name: 'Playlist',
     component: Playlist
   },

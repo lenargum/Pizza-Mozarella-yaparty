@@ -12,7 +12,7 @@
           </span>
         </div>
 
-        <div @click="$router.push('/playlist')" class="page__service">
+        <div @click="$router.push('/playlist/'+this.roomId)" class="page__service">
           <Tile :hoverable="true" :label="'Плейлист вечеринки'" :img="'party-playlist'"
                 :tile-color="'#6DAAE8'"/>
           <span class="page__service-text">
@@ -55,10 +55,16 @@ import Logo from "@/components/Icons/Logo";
 export default {
   name: "Home",
   components: {Logo, Page, Tile},
+  data: () => ({
+    roomId: ''
+  }),
   methods: {
     navigateToStub() {
       this.$router.push('/in-progress');
     }
+  },
+  mounted() {
+    this.roomId = this.$route.params.id;
   }
 }
 </script>
