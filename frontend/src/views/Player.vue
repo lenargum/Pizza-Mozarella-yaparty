@@ -33,9 +33,8 @@
       </template>
 
       <template v-if="state==='answering'">
-        <v-row
-          justify="center" class="align-self-start">
-          <v-col cols="11" sm="10" md="10" lg="4" xl="2" align-self="center">
+        <TextField>
+          <template #default>
             <v-text-field
               autofocus
               clearable
@@ -44,11 +43,11 @@
               label="Ответ"
               v-model="givenAnswer"
             />
-          </v-col>
-          <v-col cols="3" sm="2" md="1" lg="1" xl="1" align-self="start">
+          </template>
+          <template #button>
             <SmallFab @click="submitAnswerBtnHandler" type="forward"/>
-          </v-col>
-        </v-row>
+          </template>
+        </TextField>
       </template>
 
       <template v-if="state==='answered'">
@@ -72,10 +71,11 @@
 import NavPage from "@/views/templates/NavPage";
 import BigFab from "@/components/BigFab";
 import SmallFab from "@/components/SmallFab";
+import TextField from "@/components/TextField";
 
 export default {
   name: "Player",
-  components: {SmallFab, BigFab, NavPage},
+  components: {TextField, SmallFab, BigFab, NavPage},
   data: () => ({
     login: 'username stub',
     users: [

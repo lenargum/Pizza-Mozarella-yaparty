@@ -1,8 +1,7 @@
 <template>
   <NavPage :header="'Логин'" :username="username">
-    <v-row
-      justify="center" class="align-self-start">
-      <v-col cols="11" sm="10" md="10" lg="4" xl="2" align-self="center">
+    <TextField>
+      <template #default>
         <v-text-field
           autofocus
           clearable
@@ -12,28 +11,24 @@
           v-model="username"
           :maxlength="10"
         />
-      </v-col>
-      <v-col cols="3" sm="2" md="1" lg="1" xl="1" align-self="start">
+      </template>
+      <template #button>
         <SmallFab @click="$router.push('/home')" type="forward"/>
-      </v-col>
-    </v-row>
+      </template>
+    </TextField>
   </NavPage>
 </template>
 
 <script>
 import NavPage from "@/views/templates/NavPage";
 import SmallFab from "@/components/SmallFab";
+import TextField from "@/components/TextField";
 
 export default {
   name: "Login",
-  components: {SmallFab, NavPage},
+  components: {TextField, SmallFab, NavPage},
   data: () => ({
     username: ""
   }),
 }
 </script>
-<style scoped>
-.app .v-input {
-  font-size: 1.5em;
-}
-</style>
