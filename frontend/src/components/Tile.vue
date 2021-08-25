@@ -125,13 +125,11 @@
             </defs>
           </svg>
         </template>
-
         <template v-if="img==='kino'">
           <img
             style="width: 50%; height: 50%; filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)); position: absolute;bottom: 10%;right: 10%;"
-            :src="require('@/assets/kinopoisk.png')"/>
+            :src="require('@/assets/kinopoisk.png')" alt=""/>
         </template>
-
         <template v-if="img==='games'">
           <svg style="filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)); position: absolute;bottom: 10%;right: 10%;"
                width="114" height="113" viewBox="0 0 114 113" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -204,7 +202,7 @@ export default {
     height: 200px;
     filter: drop-shadow(0px 8.19231px 8.19231px rgba(0, 0, 0, 0.161));
 
-    .tile__bg:hover {
+    &:hover {
       width: var(--width);
       height: var(--height);
       top: var(--top);
