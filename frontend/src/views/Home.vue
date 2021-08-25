@@ -7,38 +7,38 @@
       <div class="page__content">
         <!--        <Tile :label="'Угадай мелодию'" :img="'guess_the_melody'"/>-->
 
-        <div class="page__service">
-          <Tile @click="navigateToStub" hoverable :label="'Афиша'" :img="'afisha'" :tile-color="'#FFCC00'"/>
+        <div @click="navigateToStub" class="page__service">
+          <Tile hoverable :label="'Афиша'" :img="'afisha'" :tile-color="'#FFCC00'"/>
           <span class="page__service-text">
             Найдём мероприятие
           </span>
         </div>
 
-        <div class="page__service">
-          <Tile @click="$router.push('/playlist')" hoverable :label="'Плейлист вечеринки'" :img="'party-playlist'"
+        <div @click="$router.push('/playlist')" class="page__service">
+          <Tile hoverable :label="'Плейлист вечеринки'" :img="'party-playlist'"
                 :tile-color="'#6DAAE8'"/>
           <span class="page__service-text">
             Соберём плейлист
           </span>
         </div>
 
-        <div class="page__service">
-          <Tile @click="navigateToStub" :label="'Еда'" hoverable :img="'eda'" :tile-color="'#FFCC00'"/>
+        <div @click="navigateToStub" class="page__service">
+          <Tile :label="'Еда'" hoverable :img="'eda'" :tile-color="'#FFCC00'"/>
           <span class="page__service-text">
             Организуем закуски
           </span>
         </div>
 
-        <div class="page__service">
-          <Tile @click="navigateToStub" hoverable :label="'Кино'" :img="'kino'" :text-color="'#fff'"
+        <div @click="navigateToStub" class="page__service">
+          <Tile hoverable :label="'Кино'" :img="'kino'" :text-color="'#fff'"
                 :tile-color="'#777'"/>
           <span class="page__service-text">
             Подскажем, что посмотреть
           </span>
         </div>
 
-        <div class="page__service">
-          <Tile @click="$router.push('/games')" hoverable :label="'Игры'" :img="'games'" :text-color="'#fff'"
+        <div @click="$router.push('/games')" class="page__service">
+          <Tile hoverable :label="'Игры'" :img="'games'" :text-color="'#fff'"
                 :tile-color="'#FC3F1D'"/>
           <span class="page__service-text">
             Не дадим заскучать

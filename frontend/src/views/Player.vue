@@ -53,16 +53,26 @@
       <template v-if="state==='answered'">
         <v-row align="center"
                justify="center" class="align-self-start">
-          <FlipCard :artist="artist" :track="track" :turned="answerIsCorrect!==undefined"/>
+          <FlipCard :answer-color="answerIsCorrect===undefined? '#ffcc00': answerIsCorrect? '#5acc5eff': '#FC3F1D'"
+                    :artist="artist" :track="track" :turned="answerIsCorrect!==undefined"/>
         </v-row>
       </template>
 
       <template v-if="state==='waiting'">
-
+        <v-row align="center"
+               justify="center" class="align-self-start">
+          <v-col cols="11" sm="10" md="10" lg="4" xl="4">
+            <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">Ждем
+              ответа ¯\_(ツ)_/¯</h3>
+          </v-col>
+        </v-row>
       </template>
 
       <template v-if="state==='waited'">
-
+        <v-row align="center"
+               justify="center" class="align-self-start">
+          <FlipCard :answer-color="'#ffcc00'" :artist="artist" :track="track" :turned="answerIsCorrect!==undefined"/>
+        </v-row>
       </template>
 
 
@@ -107,6 +117,9 @@ export default {
       this.state = state;
     },
     setAnswerIsCorrect(value) {
+      this.track = 'Новый мерин'; //todo: remove
+      this.artist = 'Моргенштерн'; //todo: remove
+
       this.answerIsCorrect = value;
     },
 
@@ -170,7 +183,7 @@ export default {
 
       if (answerCorrect) {
         this.setState("answered");
-        setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: remove true (stub)
+        setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: replace true (stub)
       }
     },
 
@@ -188,6 +201,7 @@ export default {
     //waited
     toWaited() {
       this.setState("waited");
+      setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: replace true (stub)
     },
 
   }

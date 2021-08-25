@@ -4,7 +4,7 @@
       <div class="flip-card-front">
         <Tile :label="'???'" :img="'guess_the_melody'"/>
       </div>
-      <div class="flip-card-back">
+      <div class="flip-card-back" :style="{'--answerColor': answerColor}">
         <h4 class="flip-card__track text-h6 text-sm-h5 text-md-h4 text-lg-h4 text-xl-h3">{{ track }}</h4>
         <h5 class="flip-card__artist text-h7 text-sm-h6 text-md-h5 text-lg-h5 text-xl-h4">{{ artist }}</h5>
       </div>
@@ -24,6 +24,10 @@ export default {
     turned: {
       type: Boolean,
       default: false
+    },
+    answerColor: {
+      type: String,
+      default: "#FFCC00"
     }
   },
   data: () => ({}),
@@ -73,7 +77,7 @@ export default {
 
 /* Style the back side */
 .flip-card-back {
-  background-color: $style_yellow;
+  background-color: var(--answerColor);
   color: $style_black;
   transform: rotateY(180deg);
 }
