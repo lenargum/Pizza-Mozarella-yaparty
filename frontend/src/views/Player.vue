@@ -7,7 +7,7 @@
   >
     <template #debug>
       <v-btn v-for="state in states"
-             @click="setState(state)"
+             @click="stateSwitcher(state)"
              :key="state"
              :disabled="state===$data.state"
       >{{ state }}
@@ -53,7 +53,7 @@
       <template v-if="state==='answered'">
         <v-row align="center"
                justify="center" class="align-self-start">
-          <FlipCard :artist="artist" :track="track"/>
+          <FlipCard :artist="artist" :track="track" :turned="answerIsCorrect!==undefined"/>
         </v-row>
       </template>
 
@@ -91,6 +91,7 @@ export default {
     states: ["starting", "ready", "answering", "answered", "waiting", "waited"],
     // starting, ready, answering, answered, waiting, waited
 
+    answerIsCorrect: undefined,
     givenAnswer: 'пошлая молли',
     track: 'Новый мерин',
     artist: 'Моргенштерн',
@@ -105,10 +106,50 @@ export default {
     setState(state) {
       this.state = state;
     },
+    setAnswerIsCorrect(value) {
+      this.answerIsCorrect = value;
+    },
+
+    stateSwitcher(state) {
+      switch (state) {
+        case "starting":
+          this.toStarting();
+          break;
+        case "ready":
+          this.toReady();
+          break;
+        case "answering":
+          this.toAnswering();
+          break;
+        case "answered":
+          this.toAnswered();
+          break;
+        case "waiting":
+          this.toWaiting();
+          break;
+        case "waited":
+          this.toWaited();
+          break;
+      }
+    },
 
     //starting
+    toStarting() {
+      this.setAnswerIsCorrect(undefined);
+      this.givenAnswer = '';
+      this.track = '';
+      this.artist = '';
+      this.setState("starting");
+    },
 
     //ready
+    toReady() {
+      this.setAnswerIsCorrect(undefined);
+      this.givenAnswer = '';
+      this.track = '';
+      this.artist = '';
+      this.setState("ready");
+    },
     answerBtnHandler() {
       // check if he was fast enough, instead of true
       const answering = true;
@@ -121,21 +162,33 @@ export default {
     },
 
     //answering
+    toAnswering() {
+      this.setState("answering");
+    },
     submitAnswerBtnHandler() {
-      const answerCorrect = true;
+      const answerCorrect = true; // todo: remove stub
 
       if (answerCorrect) {
         this.setState("answered");
+        setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: remove true (stub)
       }
-      this.givenAnswer = "";
-    }
+    },
 
     //answered
+    toAnswered() {
+      this.setState("answered");
+    },
 
 
     //waiting
+    toWaiting() {
+      this.setState("waiting");
+    },
 
     //waited
+    toWaited() {
+      this.setState("waited");
+    },
 
   }
 }

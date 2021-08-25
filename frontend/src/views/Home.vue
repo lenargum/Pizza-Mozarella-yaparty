@@ -110,6 +110,8 @@ export default {
     justify-content: flex-start;
     gap: 35px;
 
+    cursor: pointer;
+
     &-text {
       width: 200px;
 

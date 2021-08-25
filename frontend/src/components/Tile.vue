@@ -193,12 +193,8 @@ export default {
 
 <style lang="scss" scoped>
 .tile {
-
-
   min-height: 200px;
   min-width: 200px;
-
-  cursor: pointer;
 
   &__bg {
     transition: top 1s ease-in-out, left 1s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out;
