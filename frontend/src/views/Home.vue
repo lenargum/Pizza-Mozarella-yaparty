@@ -5,8 +5,6 @@
         <Logo :is-black="false"/>
       </div>
       <div class="page__content">
-        <!--        <Tile :label="'Угадай мелодию'" :img="'guess_the_melody'"/>-->
-
         <div @click="navigateToStub" class="page__service">
           <Tile :hoverable="true" :label="'Афиша'" :img="'afisha'" :tile-color="'#FFCC00'"/>
           <span class="page__service-text">
