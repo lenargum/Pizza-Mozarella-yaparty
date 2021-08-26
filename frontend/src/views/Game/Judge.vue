@@ -97,6 +97,9 @@ export default {
     users: [],
     sessionId: '',
 
+    judge: '',
+    started: false,
+
     state: 'starting',
     states: ["starting", "ready", "answering", "checking", "answered", "continuing"],
     // starting, ready, answering, checking, answered, continuing
@@ -120,28 +123,28 @@ export default {
     stateSwitcher(state) {
       switch (state) {
         case "starting":
-          this.toStarting();
+          this.judgeToStarting();
           break;
         case "ready":
-          this.toReady();
+          this.judgeToReady();
           break;
         case "answering":
-          this.toAnswering();
+          this.judgeToAnswering();
           break;
         case "checking":
-          this.toChecking();
+          this.judgeToChecking();
           break;
         case "answered":
-          this.toAnswered();
+          this.judgeToAnswered();
           break;
         case "continuing":
-          this.toContinuing();
+          this.judgeToContinuing();
           break;
       }
     },
 
     //starting
-    toStarting() {
+    judgeToStarting() {
       this.setAnswerIsCorrect(undefined);
       this.givenAnswer = '';
       this.track = '';
@@ -152,12 +155,14 @@ export default {
       let data_json = {"room_id": this.sessionId, "event_type": 1, "payload": {}};
       await WS.socket.send(JSON.stringify(data_json));
 
-      this.toReady();
+      this.judgeToReady();
     },
 
     //ready
-    toReady() {
+    judgeToReady() {
       this.setAnswerIsCorrect(undefined);
+      this.started = true;
+
       this.givenAnswer = '';
       this.track = '';
       this.artist = '';
@@ -165,12 +170,12 @@ export default {
     },
 
     //answering
-    toAnswering() {
+    judgeToAnswering() {
       this.setState("answering");
     },
 
     //checking
-    toChecking() {
+    judgeToChecking() {
       this.setState("checking");
     },
     async declineAnswer() {
@@ -179,7 +184,7 @@ export default {
       };
       await WS.socket.send(JSON.stringify(data_json));
 
-      this.toAnswered();
+      this.judgeToAnswered();
       setTimeout(this.setAnswerIsCorrect, 3000, false);
     },
     async acceptAnswer() {
@@ -188,17 +193,17 @@ export default {
       };
       await WS.socket.send(JSON.stringify(data_json));
 
-      this.toAnswered();
+      this.judgeToAnswered();
       setTimeout(this.setAnswerIsCorrect, 3000, true);
     },
 
     //answered
-    toAnswered() {
+    judgeToAnswered() {
       this.setState("answered");
     },
 
     //continuing
-    toContinuing() {
+    judgeToContinuing() {
       this.setState("continuing");
     },
     async continueBtnHandler() {
@@ -207,16 +212,21 @@ export default {
       };
       await WS.socket.send(JSON.stringify(data_json));
 
-      this.toReady();
+      this.judgeToReady();
     }
   },
   mounted() {
     if (Object.keys(WS).length) {
       this.sessionId = WS.session;
       this.login = WS.login;
+      this.judge = WS.judge;
     } else {
       this.$router.go(-1);
     }
+  },
+  beforeUpdate() {
+    this.users = WS.users;
+    this.started = WS.started;
   }
 }
 </script>

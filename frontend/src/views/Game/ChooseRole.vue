@@ -22,8 +22,9 @@ export default {
   components: {BigFab, NavPage},
   data: () => ({
     login: '',
-    users: [],
-    sessionId: '',
+    users: WS.users,
+    sessionId: WS.started,
+    judge: WS.judge
   }),
   methods: {
     playerChoiceHandler() {
@@ -42,6 +43,15 @@ export default {
     } else {
       this.$router.go(-1);
     }
+  },
+  watch: {
+    users(val) {
+      console.log(val);
+    },
+  },
+  beforeUpdate() {
+    console.log(WS.users);
+    this.users = WS.users;
   }
 }
 </script>

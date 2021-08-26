@@ -72,6 +72,7 @@ export default {
               switch (payload.event) {
                 case "connected":
                   WS.users.append(atob(payload.client));
+                  this.$set(WS.users,);
                   break;
                 case "disconnected":
                   WS.users.splice(WS.users.indexOf(atob(payload.client)), 1);
@@ -85,7 +86,7 @@ export default {
                   WS.judge = atob(payload.judge);
                   break;
                 case "play":
-                  this.setState("starting");
+                  this.playerToStarting();
                   WS.started = true
               }
               break;

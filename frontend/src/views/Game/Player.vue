@@ -96,6 +96,9 @@ export default {
     users: [],
     sessionId: '',
 
+    judge: '',
+    started: false,
+
     score: 100,
 
     state: 'starting',
@@ -121,28 +124,28 @@ export default {
     stateSwitcher(state) {
       switch (state) {
         case "starting":
-          this.toStarting();
+          this.playerToStarting();
           break;
         case "ready":
-          this.toReady();
+          this.playerToReady();
           break;
         case "answering":
-          this.toAnswering();
+          this.playerToAnswering();
           break;
         case "answered":
-          this.toAnswered();
+          this.playerToAnswered();
           break;
         case "waiting":
-          this.toWaiting();
+          this.playerToWaiting();
           break;
         case "waited":
-          this.toWaited();
+          this.playerToWaited();
           break;
       }
     },
 
     //starting
-    toStarting() {
+    playerToStarting() {
       this.setAnswerIsCorrect(undefined);
       this.givenAnswer = '';
       this.track = '';
@@ -151,7 +154,7 @@ export default {
     },
 
     //ready
-    toReady() {
+    playerToReady() {
       this.setAnswerIsCorrect(undefined);
       this.givenAnswer = '';
       this.track = '';
@@ -175,7 +178,7 @@ export default {
     },
 
     //answering
-    toAnswering() {
+    playerToAnswering() {
       this.setState("answering");
     },
     async submitAnswerBtnHandler() {
@@ -195,18 +198,18 @@ export default {
     },
 
     //answered
-    toAnswered() {
+    playerToAnswered() {
       this.setState("answered");
     },
 
 
     //waiting
-    toWaiting() {
+    playerToWaiting() {
       this.setState("waiting");
     },
 
     //waited
-    toWaited() {
+    playerToWaited() {
       this.setState("waited");
       setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: replace true (stub)
     },
@@ -216,11 +219,15 @@ export default {
     if (Object.keys(WS).length) {
       this.sessionId = WS.session;
       this.login = WS.login;
+      this.judge = WS.judge;
     } else {
       this.$router.go(-1);
     }
   },
-  watch: {}
+  beforeUpdate() {
+    this.users = WS.users;
+    this.started = WS.started;
+  }
 }
 </script>
 
