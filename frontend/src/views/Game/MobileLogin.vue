@@ -10,6 +10,8 @@
           solo
           v-model="username"
           :maxlength="10"
+          :error="error"
+          :error-messages="error?'Логин не должен быть пустым':''"
         />
       </template>
       <template #button>
@@ -24,23 +26,81 @@ import NavPage from "@/views/templates/NavPage";
 import SmallFab from "@/components/SmallFab";
 import TextField from "@/components/TextField";
 
+import WS from "@/views/Game/Shared/ws.js"
+
 export default {
   name: "MobileLogin",
   components: {TextField, SmallFab, NavPage},
   data: () => ({
     username: "",
     sessionId: "",
-    ws: null
+    error: false
   }),
   methods: {
     loginHandler() {
-      this.connect();
-      // this.$router.push('/play');
-    },
+      if (!this.username.length) {
+        this.error = true;
+        return;
+      } else {
+        this.error = false;
+      }
 
+      const path = '84.201.167.68';
+      const port = '4000';
+
+      WS.login = this.username;
+      WS.session = this.sessionId;
+      WS.socket = new WebSocket("ws://" + path + ":" + port + "/ws/" + this.sessionId + "/connect?token=" + this.username);
+
+      WS.socket.onopen = () => {
+        console.log('WebSocket opened');
+
+        WS.socket.onmessage = (data) => {
+          console.log('Received:', data.data);
+          let status = data.data.response_status;
+          let payload = data.data.payload;
+
+
+          switch (status) {
+            case 1:
+
+              break;
+            case 2:
+
+              break;
+            case 3:
+              switch (payload.event) {
+                case "connected":
+                  WS.users.append(atob(payload.client));
+                  break;
+                case "disconnected":
+                  WS.users.splice(WS.users.indexOf(atob(payload.client)), 1);
+                  break;
+              }
+              break;
+            case 4:
+
+              switch (payload.event) {
+                case "judge":
+                  WS.judge = atob(payload.judge);
+                  break;
+                case "play":
+                  this.setState("starting");
+                  WS.started = true
+              }
+              break;
+          }
+        }
+        this.$router.push('/play');
+      }
+    },
   },
   mounted() {
-    this.sessionId = this.$route.params.sessionId;
+    if (this.$route.params.sessionId) {
+      this.sessionId = this.$route.params.sessionId;
+    } else {
+      this.$router.go(-1);
+    }
   }
 }
 </script>

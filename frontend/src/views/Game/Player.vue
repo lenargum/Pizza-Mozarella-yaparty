@@ -19,8 +19,8 @@
         <v-row align="center"
                justify="center" class="align-self-start">
           <v-col cols="11" sm="10" md="10" lg="4" xl="4">
-            <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">Ждем
-              остальных...</h3>
+            <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">Ожидание начала
+              игры</h3>
           </v-col>
         </v-row>
       </template>
@@ -86,17 +86,18 @@ import BigFab from "@/components/BigFab";
 import SmallFab from "@/components/SmallFab";
 import TextField from "@/components/TextField";
 import FlipCard from "@/components/FlipCard";
+import WS from "@/views/Game/Shared/ws";
 
 export default {
   name: "Player",
   components: {FlipCard, TextField, SmallFab, BigFab, NavPage},
   data: () => ({
-    login: 'username stub',
-    users: [
-      'stub1',
-      'stub2'
-    ],
+    login: '',
+    users: [],
+    sessionId: '',
+
     score: 100,
+
     state: 'starting',
     states: ["starting", "ready", "answering", "answered", "waiting", "waited"],
     // starting, ready, answering, answered, waiting, waited
@@ -107,12 +108,6 @@ export default {
     artist: 'Моргенштерн',
   }),
   methods: {
-    setUsers(users) {
-      this.users = users;
-    },
-    setLogin(login) {
-      this.login = login;
-    },
     setState(state) {
       this.state = state;
     },
@@ -163,9 +158,14 @@ export default {
       this.artist = '';
       this.setState("ready");
     },
-    answerBtnHandler() {
+    async answerBtnHandler() {
       // check if he was fast enough, instead of true
-      const answering = true;
+      const answering = true; // todo: handle
+
+      const data_json = {
+        "room_id": this.sessionId, "event_type": 2, "payload": {"event": "answer"}
+      };
+      await WS.socket.send(JSON.stringify(data_json));
 
       if (answering) {
         this.setState("answering");
@@ -178,12 +178,19 @@ export default {
     toAnswering() {
       this.setState("answering");
     },
-    submitAnswerBtnHandler() {
-      const answerCorrect = true; // todo: remove stub
+    async submitAnswerBtnHandler() {
+      const data_json = {
+        "room_id": this.sessionId, "event_type": 2, "payload": {"answer": this.givenAnswer}
+      };
+      await WS.socket.send(JSON.stringify(data_json));
+      this.givenAnswer = "";
+
+      // this.answerIsCorrect = true;
+      const answerCorrect = true; // todo: handle to commented above var
 
       if (answerCorrect) {
         this.setState("answered");
-        setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: replace true (stub)
+        setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: handle
       }
     },
 
@@ -204,7 +211,16 @@ export default {
       setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: replace true (stub)
     },
 
-  }
+  },
+  mounted() {
+    if (Object.keys(WS).length) {
+      this.sessionId = WS.session;
+      this.login = WS.login;
+    } else {
+      this.$router.go(-1);
+    }
+  },
+  watch: {}
 }
 </script>
 

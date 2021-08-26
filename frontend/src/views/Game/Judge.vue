@@ -87,16 +87,16 @@ import NavPage from "@/views/templates/NavPage";
 import BigFab from "@/components/BigFab";
 import SmallFab from "@/components/SmallFab";
 import FlipCard from "@/components/FlipCard";
+import WS from "@/views/Game/Shared/ws";
 
 export default {
   name: "Judge",
   components: {FlipCard, SmallFab, BigFab, NavPage},
   data: () => ({
-    login: 'username stub',
-    users: [
-      'stub1',
-      'stub2'
-    ],
+    login: '',
+    users: [],
+    sessionId: '',
+
     state: 'starting',
     states: ["starting", "ready", "answering", "checking", "answered", "continuing"],
     // starting, ready, answering, checking, answered, continuing
@@ -107,12 +107,6 @@ export default {
     artist: 'Моргенштерн',
   }),
   methods: {
-    setUsers(users) {
-      this.users = users;
-    },
-    setLogin(login) {
-      this.login = login;
-    },
     setState(state) {
       this.state = state;
     },
@@ -124,7 +118,6 @@ export default {
     },
 
     stateSwitcher(state) {
-
       switch (state) {
         case "starting":
           this.toStarting();
@@ -155,7 +148,10 @@ export default {
       this.artist = '';
       this.setState("starting");
     },
-    startBtnHandler() {
+    async startBtnHandler() {
+      let data_json = {"room_id": this.sessionId, "event_type": 1, "payload": {}};
+      await WS.socket.send(JSON.stringify(data_json));
+
       this.toReady();
     },
 
@@ -177,17 +173,24 @@ export default {
     toChecking() {
       this.setState("checking");
     },
-    declineAnswer() {
-      // todo: send decline
+    async declineAnswer() {
+      const data_json = {
+        "room_id": this.sessionId, "event_type": 2, "payload": {"answer_correct": false}
+      };
+      await WS.socket.send(JSON.stringify(data_json));
+
       this.toAnswered();
       setTimeout(this.setAnswerIsCorrect, 3000, false);
     },
-    acceptAnswer() {
-      // todo: send accept
+    async acceptAnswer() {
+      const data_json = {
+        "room_id": this.sessionId, "event_type": 2, "payload": {"answer_correct": true}
+      };
+      await WS.socket.send(JSON.stringify(data_json));
+
       this.toAnswered();
       setTimeout(this.setAnswerIsCorrect, 3000, true);
     },
-
 
     //answered
     toAnswered() {
@@ -198,11 +201,22 @@ export default {
     toContinuing() {
       this.setState("continuing");
     },
-    continueBtnHandler() {
-      // todo: start next round completely
+    async continueBtnHandler() {
+      const data_json = {
+        "room_id": this.sessionId, "event_type": 2, "payload": {"event": "next"}
+      };
+      await WS.socket.send(JSON.stringify(data_json));
+
       this.toReady();
     }
-
+  },
+  mounted() {
+    if (Object.keys(WS).length) {
+      this.sessionId = WS.session;
+      this.login = WS.login;
+    } else {
+      this.$router.go(-1);
+    }
   }
 }
 </script>
@@ -210,20 +224,20 @@ export default {
 <style lang="scss" scoped>
 .app {
   .v-input {
-    font-size: 1.5rem !important;
+    font-size: 1.5em !important;
   }
 
   .v-label {
-    font-size: 1.5rem !important;
+    font-size: 1.5em !important;
     padding: 0 20px;
   }
 
   .v-icon {
-    font-size: 2.5rem !important;
+    font-size: 2.5em !important;
   }
 
   .v-btn {
-    font-size: 1.5rem !important;
+    font-size: 1.5em !important;
   }
 
   .input-wrapper {

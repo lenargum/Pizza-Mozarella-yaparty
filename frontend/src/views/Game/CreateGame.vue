@@ -50,9 +50,7 @@ export default {
       headers: {"Content-Type": "application/json"},
     };
     const response = await fetch("https://secure-ridge-64426.herokuapp.com/http://84.201.167.68:4000/session/create", requestOptions);
-    console.log(response);
     const data = await response.json();
-    console.log(data);
     console.log(data.session_id);
     this.localPath = "/mobileLogin/" + data.session_id;
     this.qrcodeValue = window.location.protocol + "//" + window.location.host + this.localPath;
