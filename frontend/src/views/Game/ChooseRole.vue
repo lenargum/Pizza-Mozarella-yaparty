@@ -20,9 +20,11 @@ import WS from "@/views/Game/Shared/ws.js"
 export default {
   name: "ChooseRole",
   components: {BigFab, NavPage},
+  props: {
+    users: Array,
+  },
   data: () => ({
     login: '',
-    users: WS.users,
     sessionId: WS.started,
     judge: WS.judge
   }),
@@ -44,15 +46,6 @@ export default {
       this.$router.go(-1);
     }
   },
-  watch: {
-    users(val) {
-      console.log(val);
-    },
-  },
-  beforeUpdate() {
-    console.log(WS.users);
-    this.users = WS.users;
-  }
 }
 </script>
 
