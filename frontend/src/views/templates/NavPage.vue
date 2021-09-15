@@ -98,7 +98,7 @@ export default {
     flex-wrap: nowrap;
     flex-direction: column;
     align-items: flex-start;
-    padding: 50px 50px;
+    padding: 25px;
     gap: 10px;
 
     overflow-y: auto;
