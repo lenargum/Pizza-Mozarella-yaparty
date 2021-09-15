@@ -29,6 +29,7 @@
 import NavPage from "@/views/templates/NavPage";
 import QRCode from "@/components/QRCode";
 import SmallFab from "@/components/SmallFab";
+import server from "@/data/hosts";
 
 export default {
   name: "CreateGame",
@@ -49,7 +50,8 @@ export default {
       method: "POST",
       headers: {"Content-Type": "application/json"},
     };
-    const response = await fetch("https://secure-ridge-64426.herokuapp.com/http://84.201.167.68:4000/session/create", requestOptions);
+    const response = await fetch('http://' + server.hostname + ':' + server.port + '/session/create', requestOptions);
+    console.log(response);
     const data = await response.json();
     console.log(data.session_id);
     this.localPath = "/mobileLogin/" + data.session_id;
