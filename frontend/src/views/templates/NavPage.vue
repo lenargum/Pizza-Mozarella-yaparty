@@ -1,9 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-if="hasDrawer"
-                         v-model="drawerIsOpen"
-                         app
-    >
+    <v-navigation-drawer v-if="hasDrawer" v-model="drawerIsOpen" app>
       <div class="drawer-wrapper">
         <Link :to="'/'">
           /
@@ -30,13 +27,13 @@
 
     <v-main>
       <v-container fill-height fluid>
-        <CurrentUsers v-if="users" :users="users"/>
+        <CurrentUsers v-if="users && users.length" :users="users"/>
         <Score v-if="score" :score="score"/>
         <HeaderTitle v-if="header">{{ header }}</HeaderTitle>
         <slot name="default"/>
-
       </v-container>
     </v-main>
+
   </v-app>
 </template>
 
@@ -70,7 +67,7 @@ export default {
   },
   data: () => ({
     drawerIsOpen: false,
-    hasDrawer: false
+    hasDrawer: true
   }),
   mounted() {
   }

@@ -5,7 +5,6 @@ import SpotifyLogin from "@/views/SpotifyLogin";
 import Login from "@/views/Login";
 import Home from "@/views/Home";
 import CreateGame from "@/views/Game/CreateGame";
-import ChooseRole from "@/views/Game/ChooseRole";
 import Player from "@/views/Game/Player";
 import Judge from "@/views/Game/Judge";
 import Stub from "@/views/Stub";
@@ -35,10 +34,6 @@ const routes = [
     path: '/create/game',
     name: 'CreateGame',
     component: CreateGame
-  },
-  {
-    path: '/play',
-    component: ChooseRole,
   },
   {
     path: '/play/player',

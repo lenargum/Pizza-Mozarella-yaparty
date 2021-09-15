@@ -1,23 +1,38 @@
 <template>
-  <NavPage :header="'Логин'" :username="username">
-    <TextField>
-      <template #default>
-        <v-text-field
-          autofocus
-          clearable
-          :counter="10"
-          :height="100"
-          solo
-          v-model="username"
-          :maxlength="10"
-          :error="error"
-          :error-messages="error?'Логин не должен быть пустым':''"
-        />
-      </template>
-      <template #button>
-        <SmallFab @click="loginHandler" type="forward"/>
-      </template>
-    </TextField>
+  <NavPage :header="currentState==='login'? 'Логин': currentState==='role'? 'Угадай мелодию': 'unexpected state'"
+           :username="username"
+           :users="users"
+  >
+    <template v-if="currentState==='login'">
+      <TextField>
+        <template #default>
+          <v-text-field
+            autofocus
+            clearable
+            :counter="10"
+            :height="100"
+            solo
+            v-model="username"
+            :maxlength="10"
+            :error="error"
+            :error-messages="error?'Логин не должен быть пустым':''"
+          />
+        </template>
+        <template #button>
+          <SmallFab @click="loginHandler" type="forward"/>
+        </template>
+      </TextField>
+    </template>
+    <template v-else-if="currentState==='role'">
+      <v-row align="center"
+             justify="center" class="align-self-start">
+        <v-spacer/>
+        <BigFab @click="playerChoiceHandler" text="Стать игроком"/>
+        <v-spacer/>
+        <BigFab @click="judgeChoiceHandler" text="Стать ведущим"/>
+        <v-spacer/>
+      </v-row>
+    </template>
   </NavPage>
 </template>
 
@@ -25,16 +40,30 @@
 import NavPage from "@/views/templates/NavPage";
 import SmallFab from "@/components/SmallFab";
 import TextField from "@/components/TextField";
+import BigFab from "@/components/BigFab";
 
 import WS from "@/views/Game/Shared/ws.js"
+import server from "@/data/hosts";
 
 export default {
   name: "MobileLogin",
-  components: {TextField, SmallFab, NavPage},
+  components: {
+    TextField,
+    SmallFab,
+    NavPage,
+    BigFab
+  },
   data: () => ({
+    states: ["login", "role"],
+    currentState: "login",
     username: "",
     sessionId: "",
-    error: false
+    error: false,
+    users: [],
+
+    // from ChooseRole
+    login: '',
+    judge: WS.judge
   }),
   methods: {
     loginHandler() {
@@ -45,12 +74,9 @@ export default {
         this.error = false;
       }
 
-      const path = '84.201.167.68';
-      const port = '4000';
-
       WS.login = this.username;
       WS.session = this.sessionId;
-      WS.socket = new WebSocket("ws://" + path + ":" + port + "/ws/" + this.sessionId + "/connect?token=" + this.username);
+      WS.socket = new WebSocket("ws://" + server.hostname + ":" + server.port + "/ws/" + this.sessionId + "/connect?token=" + this.username);
 
       WS.socket.onopen = () => {
         console.log('WebSocket opened');
@@ -72,7 +98,7 @@ export default {
               switch (payload.event) {
                 case "connected":
                   WS.users.append(atob(payload.client));
-                  this.$set(WS.users,);
+                  this.set(this.users, WS.users);
                   break;
                 case "disconnected":
                   WS.users.splice(WS.users.indexOf(atob(payload.client)), 1);
@@ -92,8 +118,18 @@ export default {
               break;
           }
         }
-        this.$router.push('/play');
+        this.currentState = "role";
       }
+    },
+
+    // from ChooseRole
+    playerChoiceHandler() {
+      this.$router.push('/play/player');
+    },
+    async judgeChoiceHandler() {
+      const data_json = {"room_id": this.sessionId, "event_type": 2, "payload": {"update_role": true}};
+      await WS.socket.send(JSON.stringify(data_json));
+      await this.$router.push('/play/judge');
     },
   },
   mounted() {
