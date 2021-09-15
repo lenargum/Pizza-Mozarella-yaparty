@@ -68,6 +68,9 @@ export default {
   },
   mounted() {
     this.roomId = this.$route.params.id;
+    if (this.roomId === ':id') {
+      this.$router.push('/');
+    }
   }
 }
 </script>

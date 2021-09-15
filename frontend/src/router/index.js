@@ -71,6 +71,11 @@ const routes = [
     component: Home
   },
   {
+    path: '/home',
+    name: 'Home',
+    redirect: "/"
+  },
+  {
     path: '/in-progress',
     name: 'Stub',
     component: Stub
@@ -94,10 +99,6 @@ const routes = [
     path: '/play/music',
     name: 'PlayMusic',
     component: PlayMusic
-  },
-  {
-    path: '*',
-    redirect: '/in-progress'
   }
 ];
 
