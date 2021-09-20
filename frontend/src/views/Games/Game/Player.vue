@@ -1,9 +1,9 @@
 <template>
   <NavPage
+    :header="'Угадай мелодию'"
     :username="username"
     :users="users"
-    :score="score.toString()"
-    :header="'Угадай мелодию'"
+    :score="score"
   >
     <template v-if="judge!==username" #debug>
       Player debugger
@@ -100,7 +100,7 @@ export default {
     judge: '',
     started: false,
 
-    score: 100,
+    score: "",
 
     state: 'p_starting',
     states: {
@@ -157,6 +157,7 @@ export default {
     //p_starting
     playerToStarting() {
       this.setAnswerIsCorrect(undefined);
+      this.score = '0';
       this.givenAnswer = '';
       this.track = '';
       this.artist = '';
@@ -204,6 +205,7 @@ export default {
 
       if (answerCorrect) {
         this.setState(this.states.Player.ANSWERED);
+        this.score = (parseInt(this.score) + 100).toString();
         setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: handle
       }
     },
