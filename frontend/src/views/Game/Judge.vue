@@ -3,6 +3,7 @@
     :username="login"
     :users="users"
     :header="'Угадай мелодию'"
+    :judge="judge"
   >
     <template #debug>
       <v-btn v-for="state in states"

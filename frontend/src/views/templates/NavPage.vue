@@ -27,7 +27,7 @@
 
     <v-main>
       <v-container fill-height fluid>
-        <CurrentUsers v-if="users && users.length" :users="users"/>
+        <CurrentUsers v-if="users && users.length" :users="users" :judge="judge"/>
         <Score v-if="score" :score="score"/>
         <HeaderTitle v-if="header">{{ header }}</HeaderTitle>
         <slot name="default"/>
@@ -61,6 +61,10 @@ export default {
       default: undefined
     },
     header: {
+      type: String,
+      default: undefined
+    },
+    judge: {
       type: String,
       default: undefined
     }
