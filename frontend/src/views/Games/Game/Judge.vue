@@ -10,7 +10,7 @@
       <v-btn v-for="state in states.Judge"
              @click="stateSwitcher(state)"
              :key="state"
-             :disabled="state===$data.state"
+             :disabled="state===$props.state"
       >{{ state }}
       </v-btn>
     </template>
@@ -95,19 +95,19 @@ import States from "@/views/Games/Game/Shared/States";
 export default {
   name: "Judge",
   components: {FlipCard, SmallFab, BigFab, NavPage},
+  props: {
+    username: String,
+    users: Array,
+    sessionId: String,
+    judge: String,
+    state: String,
+    WS: WebSocket,
+    song: Object,
+    answerIsCorrect: Boolean,
+  },
   data: () => ({
-    username: '',
-    users: [],
-    sessionId: '',
-
-    judge: '',
-    started: false,
-
     states: States,
-    state: this.states.Judge.STARTING,
 
-
-    answerIsCorrect: undefined,
     givenAnswer: 'пошлая молли',
     track: 'Новый мерин',
     artist: 'Моргенштерн',
@@ -164,7 +164,6 @@ export default {
     //j_ready
     judgeToReady() {
       this.setAnswerIsCorrect(undefined);
-      this.started = true;
 
       this.givenAnswer = '';
       this.track = '';
