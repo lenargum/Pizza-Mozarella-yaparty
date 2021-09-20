@@ -88,6 +88,7 @@ import SmallFab from "@/components/SmallFab";
 import TextField from "@/components/TextField";
 import FlipCard from "@/components/FlipCard";
 import WS from "@/views/Games/Game/Shared/ws";
+import States from "@/views/Games/Game/Shared/States";
 
 export default {
   name: "Player",
@@ -103,16 +104,7 @@ export default {
     score: "",
 
     state: 'p_starting',
-    states: {
-      Player: {
-        STARTING: "p_starting",
-        READY: "p_ready",
-        ANSWERING: "p_answering",
-        ANSWERED: "p_answered",
-        WAITING: "p_waiting",
-        WAITED: "p_waited"
-      }
-    },
+    states: States,
     // p_starting, p_ready, p_answering, p_answered, p_waiting, p_waited
 
     answerIsCorrect: undefined,
@@ -161,7 +153,7 @@ export default {
       this.givenAnswer = '';
       this.track = '';
       this.artist = '';
-      this.setState(this.states.Player.STARTING);
+      this.setState(States.Player.STARTING);
     },
 
     //p_ready
@@ -170,7 +162,7 @@ export default {
       this.givenAnswer = '';
       this.track = '';
       this.artist = '';
-      this.setState(this.states.Player.READY);
+      this.setState(States.Player.READY);
     },
     async answerBtnHandler() {
       // check if he was fast enough, instead of true
@@ -183,15 +175,15 @@ export default {
 
       if (answering) {
         // todo: handle state change inside listener
-        this.setState(this.states.Player.ANSWERING);
+        this.setState(States.Player.ANSWERING);
       } else {
-        this.setState(this.states.Player.WAITING);
+        this.setState(States.Player.WAITING);
       }
     },
 
     //p_answering
     playerToAnswering() {
-      this.setState(this.states.Player.ANSWERING);
+      this.setState(States.Player.ANSWERING);
     },
     async submitAnswerBtnHandler() {
       const data_json = {
@@ -204,7 +196,7 @@ export default {
       const answerCorrect = true; // todo: handle to commented above var
 
       if (answerCorrect) {
-        this.setState(this.states.Player.ANSWERED);
+        this.setState(States.Player.ANSWERED);
         this.score = (parseInt(this.score) + 100).toString();
         setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: handle
       }
@@ -212,18 +204,18 @@ export default {
 
     //p_answered
     playerToAnswered() {
-      this.setState(this.states.Player.ANSWERED);
+      this.setState(States.Player.ANSWERED);
     },
 
 
     //p_waiting
     playerToWaiting() {
-      this.setState(this.states.Player.WAITING);
+      this.setState(States.Player.WAITING);
     },
 
     //p_waited
     playerToWaited() {
-      this.setState(this.states.Player.WAITED);
+      this.setState(States.Player.WAITED);
       setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: replace true (stub)
     },
 

@@ -90,6 +90,7 @@ import BigFab from "@/components/BigFab";
 import SmallFab from "@/components/SmallFab";
 import FlipCard from "@/components/FlipCard";
 import WS from "@/views/Games/Game/Shared/ws";
+import States from "@/views/Games/Game/Shared/States";
 
 export default {
   name: "Judge",
@@ -102,16 +103,7 @@ export default {
     judge: '',
     started: false,
 
-    states: {
-      Judge: {
-        STARTING: "j_starting",
-        READY: "j_ready",
-        ANSWERING: "j_answering",
-        CHECKING: "j_checking",
-        ANSWERED: "j_answered",
-        CONTINUE: "j_continue",
-      }
-    },
+    states: States,
     state: this.states.Judge.STARTING,
 
 
@@ -160,7 +152,7 @@ export default {
       this.givenAnswer = '';
       this.track = '';
       this.artist = '';
-      this.setState(this.states.Judge.STARTING);
+      this.setState(States.Judge.STARTING);
     },
     async startBtnHandler() {
       let data_json = {"session_id": this.sessionId, "event_type": 1, "payload": {}};
@@ -177,17 +169,17 @@ export default {
       this.givenAnswer = '';
       this.track = '';
       this.artist = '';
-      this.setState(this.states.Judge.READY);
+      this.setState(States.Judge.READY);
     },
 
     //j_answering
     judgeToAnswering() {
-      this.setState(this.states.Judge.ANSWERING);
+      this.setState(States.Judge.ANSWERING);
     },
 
     //j_checking
     judgeToChecking() {
-      this.setState(this.states.Judge.CHECKING);
+      this.setState(States.Judge.CHECKING);
     },
     async declineAnswer() {
       const data_json = {
@@ -210,12 +202,12 @@ export default {
 
     //j_answered
     judgeToAnswered() {
-      this.setState(this.states.Judge.ANSWERED);
+      this.setState(States.Judge.ANSWERED);
     },
 
     //j_continue
     judgeToContinue() {
-      this.setState(this.states.Judge.CONTINUE);
+      this.setState(States.Judge.CONTINUE);
     },
     async continueBtnHandler() {
       const data_json = {

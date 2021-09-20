@@ -1,10 +1,10 @@
 <template>
-  <NavPage :header="currentState===states.LOGIN? 'Логин': 'Угадай мелодию'"
+  <NavPage :header="currentState===states.Game.LOGIN? 'Логин': 'Угадай мелодию'"
            :username="username"
            :users="users"
            :judge="judge"
   >
-    <template v-if="currentState===states.CREATE">
+    <template v-if="currentState===states.Game.CREATE">
       <SmallFab v-if="!loading" class="next-btn" @click="createGameBtnHandler" type="forward"/>
       <v-row align="center"
              justify="center" class="align-self-start">
@@ -28,7 +28,7 @@
         </template>
       </v-row>
     </template>
-    <template v-else-if="currentState===states.LOGIN">
+    <template v-else-if="currentState===states.Game.LOGIN">
       <TextField>
         <template #default>
           <v-text-field
@@ -48,7 +48,7 @@
         </template>
       </TextField>
     </template>
-    <template v-else-if="currentState===states.ROLE">
+    <template v-else-if="currentState===states.Game.ROLE">
       <v-row align="center"
              justify="center" class="align-self-start">
         <v-spacer/>
@@ -69,6 +69,7 @@ import BigFab from "@/components/BigFab";
 import QRCode from "@/components/QRCode";
 
 import server from "@/data/hosts";
+import States from "@/views/Games/Game/Shared/States";
 
 export default {
   name: "MobileLogin",
@@ -80,12 +81,8 @@ export default {
     QRCode,
   },
   data: () => ({
-    states: {
-      CREATE: "create",
-      LOGIN: "login",
-      ROLE: "role"
-    },
-    currentState: "create",
+    states: States,
+    currentState: States.Game.CREATE,
     sessionId: "",
     username: "",
     users: [],
@@ -139,6 +136,9 @@ export default {
     setUsers(users) {
       this.users = users;
     },
+    setState(state) {
+      this.currentState = state;
+    },
 
     // HANDLERS
 
@@ -164,7 +164,7 @@ export default {
         this.WS.onmessage = (data) => {
           this.serverMessagesHandler(data);
         }
-        this.currentState = this.states.ROLE;
+        this.setState(States.Game.ROLE);
       }
     },
 
@@ -181,10 +181,10 @@ export default {
     // HANDLERS - COMMON
     async sessionIdHandler(sessionId) {
       if (sessionId) {
-        this.currentState = this.states.LOGIN;
+        this.setState(States.Game.LOGIN);
         this.sessionId = sessionId;
       } else {
-        this.currentState = this.states.CREATE;
+        this.setState(States.Game.CREATE);
         const requestOptions = {
           method: "POST",
           headers: {"Content-Type": "application/json"},
