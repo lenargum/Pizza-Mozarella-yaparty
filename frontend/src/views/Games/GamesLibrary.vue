@@ -5,7 +5,7 @@
         Ваша библиотека
       </h2>
       <div class="games__tiles">
-        <div @click="$router.push('/create/game')" class="games__tile">
+        <div @click="$router.push('/games/guess-the-melody/')" class="games__tile">
           <Tile :hoverable="true" :label="'Угадай мелодию'"
                 :img="'guess_the_melody'"/>
         </div>
@@ -39,7 +39,7 @@ import NavPage from "@/views/templates/NavPage";
 import Tile from "@/components/Tile";
 
 export default {
-  name: "Games",
+  name: "GamesLibrary",
   components: {Tile, NavPage}
 }
 </script>

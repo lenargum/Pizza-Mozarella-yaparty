@@ -88,7 +88,7 @@ import NavPage from "@/views/templates/NavPage";
 import BigFab from "@/components/BigFab";
 import SmallFab from "@/components/SmallFab";
 import FlipCard from "@/components/FlipCard";
-import WS from "@/views/Game/Shared/ws";
+import WS from "@/views/Games/Game/Shared/ws";
 
 export default {
   name: "Judge",

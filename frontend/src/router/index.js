@@ -4,15 +4,16 @@ import CreateRoom from "@/views/CreateRoom.vue";
 import SpotifyLogin from "@/views/SpotifyLogin";
 import Login from "@/views/Login";
 import Home from "@/views/Home";
-import CreateGame from "@/views/Game/CreateGame";
-import Player from "@/views/Game/Player";
-import Judge from "@/views/Game/Judge";
+import Player from "@/views/Games/Game/Player";
+import Judge from "@/views/Games/Game/Judge";
 import Stub from "@/views/Stub";
-import MobileLogin from "@/views/Game/MobileLogin";
-import Games from "@/views/Games";
+import GamesWrapper from "@/views/GamesWrapper";
+import GamesLibrary from "@/views/Games/GamesLibrary";
+import GuessTheMelody from "@/views/Games/Game/GuessTheMelody";
 import Playlist from "@/views/Playlist";
-import LeaderBoard from "@/views/Game/LeaderBoard";
-import PlayMusic from "@/views/Game/PlayMusic";
+import LeaderBoard from "@/views/Games/Game/LeaderBoard";
+import PlayMusic from "@/views/Games/Game/PlayMusic";
+
 
 Vue.use(VueRouter);
 
@@ -29,11 +30,6 @@ const routes = [
     path: '/create/room',
     name: 'CreateRoom',
     component: CreateRoom
-  },
-  {
-    path: '/create/game',
-    name: 'CreateGame',
-    component: CreateGame
   },
   {
     path: '/play/player',
@@ -55,30 +51,32 @@ const routes = [
     name: 'Login',
     component: Login
   },
-  {
-    path: '/mobileLogin/:sessionId',
-    name: 'MobileLogin',
-    component: MobileLogin
-  },
+
   {
     path: '/home/:id',
     name: 'Home',
     component: Home
   },
   {
-    path: '/home',
-    name: 'Home',
-    redirect: "/"
-  },
-  {
-    path: '/in-progress',
-    name: 'Stub',
-    component: Stub
-  },
-  {
     path: '/games',
-    name: 'Games',
-    component: Games
+    component: GamesWrapper,
+    children: [
+      {
+        path: 'guess-the-melody/:sessionId',
+        name: "GuessTheMelody",
+        component: GuessTheMelody
+      },
+      {
+        path: 'guess-the-melody',
+        name: "GuessTheMelody",
+        component: GuessTheMelody
+      },
+      {
+        path: '',
+        name: "GamesLibrary",
+        component: GamesLibrary
+      },
+    ]
   },
   {
     path: '/playlist/:id',
@@ -94,7 +92,12 @@ const routes = [
     path: '/play/music',
     name: 'PlayMusic',
     component: PlayMusic
-  }
+  },
+  {
+    path: '/in-progress',
+    name: 'Stub',
+    component: Stub
+  },
 ];
 
 const router = new VueRouter({

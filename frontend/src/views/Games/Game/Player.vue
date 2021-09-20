@@ -86,7 +86,7 @@ import BigFab from "@/components/BigFab";
 import SmallFab from "@/components/SmallFab";
 import TextField from "@/components/TextField";
 import FlipCard from "@/components/FlipCard";
-import WS from "@/views/Game/Shared/ws";
+import WS from "@/views/Games/Game/Shared/ws";
 
 export default {
   name: "Player",
