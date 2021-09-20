@@ -225,6 +225,12 @@ export default {
           if (payload.clients) {
             this.setUsers(payload.clients.map((client_base64) => (atob(client_base64))));
             if (payload.judge) this.setJudge(atob(payload.judge));
+          } else if (payload.event) {
+            switch (payload.event) {
+              case "answer":
+                // todo: playerToAnswering()
+                break;
+            }
           }
           break;
         case 2:
@@ -247,10 +253,15 @@ export default {
               this.setJudge(atob(payload.judge));
               break;
             case "play":
-            // TODO: handle start of the game
+              // TODO: handle start of the game
 
-            // this.playerToStarting();
-            // WS.started = true
+              // this.playerToStarting();
+              // WS.started = true
+              break;
+            case "answer":
+            // todo: uncomment and connect
+            // answeringPlayer = payload.first
+            // playerToWaiting
           }
           break;
       }
