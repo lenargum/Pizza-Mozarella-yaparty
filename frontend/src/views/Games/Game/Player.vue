@@ -1,12 +1,13 @@
 <template>
   <NavPage
-    :username="login"
+    :username="username"
     :users="users"
     :score="score.toString()"
     :header="'Угадай мелодию'"
   >
-    <template #debug>
-      <v-btn v-for="state in states"
+    <template v-if="judge!==username" #debug>
+      Player debugger
+      <v-btn v-for="state in states.Player"
              @click="stateSwitcher(state)"
              :key="state"
              :disabled="state===$data.state"
@@ -15,7 +16,7 @@
     </template>
     <template>
 
-      <template v-if="state==='starting'">
+      <template v-if="state===states.Player.STARTING">
         <v-row align="center"
                justify="center" class="align-self-start">
           <v-col cols="11" sm="10" md="10" lg="4" xl="4">
@@ -25,14 +26,14 @@
         </v-row>
       </template>
 
-      <template v-if="state==='ready'">
+      <template v-if="state===states.Player.READY">
         <v-row align="center"
                justify="center" class="align-self-start">
           <BigFab @click="answerBtnHandler" text="Ответить"/>
         </v-row>
       </template>
 
-      <template v-if="state==='answering'">
+      <template v-if="state===states.Player.ANSWERING">
         <TextField>
           <template #default>
             <v-text-field
@@ -50,7 +51,7 @@
         </TextField>
       </template>
 
-      <template v-if="state==='answered'">
+      <template v-if="state===states.Player.ANSWERED">
         <v-row align="center"
                justify="center" class="align-self-start">
           <FlipCard :answer-color="answerIsCorrect===undefined? '#ffcc00': answerIsCorrect? '#5acc5eff': '#FC3F1D'"
@@ -58,7 +59,7 @@
         </v-row>
       </template>
 
-      <template v-if="state==='waiting'">
+      <template v-if="state===states.Player.WAITING">
         <v-row align="center"
                justify="center" class="align-self-start">
           <v-col cols="11" sm="10" md="10" lg="4" xl="4">
@@ -68,7 +69,7 @@
         </v-row>
       </template>
 
-      <template v-if="state==='waited'">
+      <template v-if="state===states.Player.WAITED">
         <v-row align="center"
                justify="center" class="align-self-start">
           <FlipCard :answer-color="'#ffcc00'" :artist="artist" :track="track" :turned="answerIsCorrect!==undefined"/>
@@ -92,7 +93,7 @@ export default {
   name: "Player",
   components: {FlipCard, TextField, SmallFab, BigFab, NavPage},
   data: () => ({
-    login: '',
+    username: '',
     users: [],
     sessionId: '',
 
@@ -101,9 +102,18 @@ export default {
 
     score: 100,
 
-    state: 'starting',
-    states: ["starting", "ready", "answering", "answered", "waiting", "waited"],
-    // starting, ready, answering, answered, waiting, waited
+    state: 'p_starting',
+    states: {
+      Player: {
+        STARTING: "p_starting",
+        READY: "p_ready",
+        ANSWERING: "p_answering",
+        ANSWERED: "p_answered",
+        WAITING: "p_waiting",
+        WAITED: "p_waited"
+      }
+    },
+    // p_starting, p_ready, p_answering, p_answered, p_waiting, p_waited
 
     answerIsCorrect: undefined,
     givenAnswer: 'пошлая молли',
@@ -123,67 +133,68 @@ export default {
 
     stateSwitcher(state) {
       switch (state) {
-        case "starting":
+        case this.states.Player.STARTING:
           this.playerToStarting();
           break;
-        case "ready":
+        case this.states.Player.READY:
           this.playerToReady();
           break;
-        case "answering":
+        case this.states.Player.ANSWERING:
           this.playerToAnswering();
           break;
-        case "answered":
+        case this.states.Player.ANSWERED:
           this.playerToAnswered();
           break;
-        case "waiting":
+        case this.states.Player.WAITING:
           this.playerToWaiting();
           break;
-        case "waited":
+        case this.states.Player.WAITED:
           this.playerToWaited();
           break;
       }
     },
 
-    //starting
+    //p_starting
     playerToStarting() {
       this.setAnswerIsCorrect(undefined);
       this.givenAnswer = '';
       this.track = '';
       this.artist = '';
-      this.setState("starting");
+      this.setState(this.states.Player.STARTING);
     },
 
-    //ready
+    //p_ready
     playerToReady() {
       this.setAnswerIsCorrect(undefined);
       this.givenAnswer = '';
       this.track = '';
       this.artist = '';
-      this.setState("ready");
+      this.setState(this.states.Player.READY);
     },
     async answerBtnHandler() {
       // check if he was fast enough, instead of true
       const answering = true; // todo: handle
 
       const data_json = {
-        "room_id": this.sessionId, "event_type": 2, "payload": {"event": "answer"}
+        "session_id": this.sessionId, "event_type": 2, "payload": {"event": "answer"}
       };
       await WS.socket.send(JSON.stringify(data_json));
 
       if (answering) {
-        this.setState("answering");
+        // todo: handle state change inside listener
+        this.setState(this.states.Player.ANSWERING);
       } else {
-        this.setState("waiting");
+        this.setState(this.states.Player.WAITING);
       }
     },
 
-    //answering
+    //p_answering
     playerToAnswering() {
-      this.setState("answering");
+      this.setState(this.states.Player.ANSWERING);
     },
     async submitAnswerBtnHandler() {
       const data_json = {
-        "room_id": this.sessionId, "event_type": 2, "payload": {"answer": this.givenAnswer}
+        "session_id": this.sessionId, "event_type": 2, "payload": {"answer": this.givenAnswer}
       };
       await WS.socket.send(JSON.stringify(data_json));
       this.givenAnswer = "";
@@ -192,45 +203,28 @@ export default {
       const answerCorrect = true; // todo: handle to commented above var
 
       if (answerCorrect) {
-        this.setState("answered");
+        this.setState(this.states.Player.ANSWERED);
         setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: handle
       }
     },
 
-    //answered
+    //p_answered
     playerToAnswered() {
-      this.setState("answered");
+      this.setState(this.states.Player.ANSWERED);
     },
 
 
-    //waiting
+    //p_waiting
     playerToWaiting() {
-      this.setState("waiting");
+      this.setState(this.states.Player.WAITING);
     },
 
-    //waited
+    //p_waited
     playerToWaited() {
-      this.setState("waited");
+      this.setState(this.states.Player.WAITED);
       setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: replace true (stub)
     },
 
   },
-  mounted() {
-    if (Object.keys(WS).length) {
-      this.sessionId = WS.session;
-      this.login = WS.login;
-      this.judge = WS.judge;
-    } else {
-      this.$router.go(-1);
-    }
-  },
-  beforeUpdate() {
-    this.users = WS.users;
-    this.started = WS.started;
-  }
 }
 </script>
-
-<style scoped>
-
-</style>

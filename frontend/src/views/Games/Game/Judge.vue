@@ -1,12 +1,13 @@
 <template>
   <NavPage
-    :username="login"
+    :username="username"
     :users="users"
     :header="'Угадай мелодию'"
     :judge="judge"
   >
-    <template #debug>
-      <v-btn v-for="state in states"
+    <template v-if="judge===username" #debug>
+      Judge debugger
+      <v-btn v-for="state in states.Judge"
              @click="stateSwitcher(state)"
              :key="state"
              :disabled="state===$data.state"
@@ -15,14 +16,14 @@
     </template>
     <template>
 
-      <template v-if="state==='starting'">
+      <template v-if="state===states.Judge.STARTING">
         <v-row align="center"
                justify="center" class="align-self-start">
           <BigFab @click="startBtnHandler" text="Начать игру"/>
         </v-row>
       </template>
 
-      <template v-if="state==='ready'">
+      <template v-if="state===states.Judge.READY">
         <v-row align="center"
                justify="center" class="align-self-start">
           <v-col cols="11" sm="10" md="10" lg="4" xl="4">
@@ -32,7 +33,7 @@
         </v-row>
       </template>
 
-      <template v-if="state==='answering'">
+      <template v-if="state===states.Judge.ANSWERING">
         <v-row align="center"
                justify="center" class="align-self-start">
           <v-col cols="11" sm="10" md="10" lg="4" xl="4">
@@ -42,7 +43,7 @@
         </v-row>
       </template>
 
-      <template v-if="state==='checking'">
+      <template v-if="state===states.Judge.CHECKING">
         <v-row align="center"
                justify="center" class="align-self-start">
           <FlipCard :answer-color="'#ffcc00'" :artist="artist" :track="track" :turned="true"/>
@@ -63,7 +64,7 @@
         </v-row>
       </template>
 
-      <template v-if="state==='answered'">
+      <template v-if="state===states.Judge.ANSWERED">
         <v-row align="center"
                justify="center" class="align-self-start">
           <FlipCard :answer-color="answerIsCorrect===undefined? '#ffcc00': answerIsCorrect? '#5acc5eff': '#FC3F1D'"
@@ -71,7 +72,7 @@
         </v-row>
       </template>
 
-      <template v-if="state==='continuing'">
+      <template v-if="state===states.Judge.CONTINUE">
         <v-row align="center"
                justify="center" class="align-self-start">
           <BigFab @click="continueBtnHandler" text="Следующая песня"/>
@@ -94,16 +95,25 @@ export default {
   name: "Judge",
   components: {FlipCard, SmallFab, BigFab, NavPage},
   data: () => ({
-    login: '',
+    username: '',
     users: [],
     sessionId: '',
 
     judge: '',
     started: false,
 
-    state: 'starting',
-    states: ["starting", "ready", "answering", "checking", "answered", "continuing"],
-    // starting, ready, answering, checking, answered, continuing
+    states: {
+      Judge: {
+        STARTING: "j_starting",
+        READY: "j_ready",
+        ANSWERING: "j_answering",
+        CHECKING: "j_checking",
+        ANSWERED: "j_answered",
+        CONTINUE: "j_continue",
+      }
+    },
+    state: this.states.Judge.STARTING,
+
 
     answerIsCorrect: undefined,
     givenAnswer: 'пошлая молли',
@@ -123,43 +133,43 @@ export default {
 
     stateSwitcher(state) {
       switch (state) {
-        case "starting":
+        case this.states.Judge.STARTING:
           this.judgeToStarting();
           break;
-        case "ready":
+        case this.states.Judge.READY:
           this.judgeToReady();
           break;
-        case "answering":
+        case this.states.Judge.ANSWERING:
           this.judgeToAnswering();
           break;
-        case "checking":
+        case this.states.Judge.CHECKING:
           this.judgeToChecking();
           break;
-        case "answered":
+        case this.states.Judge.ANSWERED:
           this.judgeToAnswered();
           break;
-        case "continuing":
-          this.judgeToContinuing();
+        case this.states.Judge.CONTINUE:
+          this.judgeToContinue();
           break;
       }
     },
 
-    //starting
+    //j_starting
     judgeToStarting() {
       this.setAnswerIsCorrect(undefined);
       this.givenAnswer = '';
       this.track = '';
       this.artist = '';
-      this.setState("starting");
+      this.setState(this.states.Judge.STARTING);
     },
     async startBtnHandler() {
-      let data_json = {"room_id": this.sessionId, "event_type": 1, "payload": {}};
+      let data_json = {"session_id": this.sessionId, "event_type": 1, "payload": {}};
       await WS.socket.send(JSON.stringify(data_json));
 
       this.judgeToReady();
     },
 
-    //ready
+    //j_ready
     judgeToReady() {
       this.setAnswerIsCorrect(undefined);
       this.started = true;
@@ -167,21 +177,21 @@ export default {
       this.givenAnswer = '';
       this.track = '';
       this.artist = '';
-      this.setState("ready");
+      this.setState(this.states.Judge.READY);
     },
 
-    //answering
+    //j_answering
     judgeToAnswering() {
-      this.setState("answering");
+      this.setState(this.states.Judge.ANSWERING);
     },
 
-    //checking
+    //j_checking
     judgeToChecking() {
-      this.setState("checking");
+      this.setState(this.states.Judge.CHECKING);
     },
     async declineAnswer() {
       const data_json = {
-        "room_id": this.sessionId, "event_type": 2, "payload": {"answer_correct": false}
+        "session_id": this.sessionId, "event_type": 2, "payload": {"answer_correct": false}
       };
       await WS.socket.send(JSON.stringify(data_json));
 
@@ -190,7 +200,7 @@ export default {
     },
     async acceptAnswer() {
       const data_json = {
-        "room_id": this.sessionId, "event_type": 2, "payload": {"answer_correct": true}
+        "session_id": this.sessionId, "event_type": 2, "payload": {"answer_correct": true}
       };
       await WS.socket.send(JSON.stringify(data_json));
 
@@ -198,37 +208,24 @@ export default {
       setTimeout(this.setAnswerIsCorrect, 3000, true);
     },
 
-    //answered
+    //j_answered
     judgeToAnswered() {
-      this.setState("answered");
+      this.setState(this.states.Judge.ANSWERED);
     },
 
-    //continuing
-    judgeToContinuing() {
-      this.setState("continuing");
+    //j_continue
+    judgeToContinue() {
+      this.setState(this.states.Judge.CONTINUE);
     },
     async continueBtnHandler() {
       const data_json = {
-        "room_id": this.sessionId, "event_type": 2, "payload": {"event": "next"}
+        "session_id": this.sessionId, "event_type": 2, "payload": {"event": "next"}
       };
       await WS.socket.send(JSON.stringify(data_json));
 
       this.judgeToReady();
     }
   },
-  mounted() {
-    if (Object.keys(WS).length) {
-      this.sessionId = WS.session;
-      this.login = WS.login;
-      this.judge = WS.judge;
-    } else {
-      this.$router.go(-1);
-    }
-  },
-  beforeUpdate() {
-    this.users = WS.users;
-    this.started = WS.started;
-  }
 }
 </script>
 
