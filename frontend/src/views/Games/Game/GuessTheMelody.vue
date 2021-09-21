@@ -286,7 +286,7 @@ export default {
 
       switch (status) {
         case 1:
-          if (payload.clients) {
+          if ("clients" in payload) {
             this.setUsers(payload.clients);
             if (payload.judge) this.setJudge(payload.judge);
           }
@@ -295,7 +295,7 @@ export default {
 
           break;
         case 3:
-          if (payload.event) {
+          if ("event" in payload) {
             switch (payload.event) {
               case "connected":
                 this.userConnected(payload.client);
@@ -304,18 +304,18 @@ export default {
                 this.userDisconnected(payload.client);
                 break;
             }
-          } else if (payload.song && payload.answer && "answer_correct" in payload) {
+          } else if ("song" in payload && "answer" in payload && "answer_correct" in payload) {
             this.playerState = States.Player.WAITED;
             this.song = payload.song;
             this.givenAnswer = payload.answer;
             setTimeout(() => (this.answerIsCorrect = payload.answer_correct), 3000);
-          } else if (payload.score_board) {
+          } else if ("score_board" in payload) {
             this.scoreboard = payload.score_board.map((line) => ({username: line[0], score: line[1]}));
             this.scoreboard = this.scoreboard.filter((record) => (record.username !== this.judge));
           }
           break;
         case 4:
-          if (payload.event) {
+          if ("event" in payload) {
             switch (payload.event) {
               case "judge":
                 this.setJudge(payload.judge);
@@ -333,7 +333,7 @@ export default {
                 this.started = true;
                 break;
               case "answer":
-                if (payload.first) {
+                if ("first" in payload) {
                   this.answeringPlayer = payload.first;
                   if (this.username === this.answeringPlayer) {
                     this.playerState = States.Player.ANSWERING;
@@ -347,13 +347,13 @@ export default {
             break;
           }
 
-          if ("answer_correct" in payload && payload.song && payload.answer && payload.score) {
+          if ("answer_correct" in payload && "song" in payload && "answer" in payload && "score" in payload) {
             this.playerState = States.Player.ANSWERED;
             this.song = payload.song;
             this.givenAnswer = payload.answer;
             setTimeout(() => (this.score = payload.score.toString()), 3000);
             setTimeout(this.setAnswerIsCorrect, 3000, payload.answer_correct);
-          } else if (payload.answer && payload.song) {
+          } else if ("answer" in payload && "song" in payload) {
             this.givenAnswer = payload.answer;
             this.song = payload.song;
             this.judgeState = States.Judge.CHECKING;
