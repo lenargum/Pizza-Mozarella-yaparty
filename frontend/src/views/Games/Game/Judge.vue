@@ -17,9 +17,11 @@
       <template v-if="state===states.Judge.READY">
         <v-row align="center"
                justify="center" class="align-self-start">
-          <v-col cols="11" sm="10" md="10" lg="9" xl="8">
-            <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">Ждем
-              самого быстрого...</h3>
+          <v-col cols="11" sm="10" md="10" lg="9" xl="8" align="center">
+            <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">Ждем самого
+              быстрого 🚀</h3>
+            <v-spacer :style="{height: '5vw'}"/>
+            <WaitingLoader/>
           </v-col>
         </v-row>
       </template>
@@ -27,9 +29,11 @@
       <template v-if="state===states.Judge.ANSWERING">
         <v-row align="center"
                justify="center" class="align-self-start">
-          <v-col cols="11" sm="10" md="10" lg="9" xl="8">
-            <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">Ждем
-              самого быстропечатающего...</h3>
+          <v-col cols="11" sm="10" md="10" lg="9" xl="8" align="center">
+            <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">
+              {{ answeringPlayer + " отвечает" }}</h3>
+            <v-spacer :style="{height: '5vw'}"/>
+            <WaitingLoader/>
           </v-col>
         </v-row>
       </template>
@@ -80,11 +84,12 @@ import NavPage from "@/views/templates/NavPage";
 import BigFab from "@/components/BigFab";
 import SmallFab from "@/components/SmallFab";
 import FlipCard from "@/components/FlipCard";
+import WaitingLoader from "@/components/WaitingLoader";
 import States from "@/views/Games/Game/Shared/States";
 
 export default {
   name: "Judge",
-  components: {FlipCard, SmallFab, BigFab, NavPage},
+  components: {WaitingLoader, FlipCard, SmallFab, BigFab, NavPage},
   props: {
     username: String,
     users: Array,

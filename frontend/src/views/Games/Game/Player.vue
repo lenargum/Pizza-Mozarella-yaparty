@@ -32,7 +32,7 @@
               clearable
               :height="100"
               solo
-              label="Ответ"
+              placeholder="Ответ"
               v-model="answer"
               @keydown.enter="submitAnswerBtnHandler"
             />
@@ -65,9 +65,11 @@
       <template v-if="state===states.Player.WAITING">
         <v-row align="center"
                justify="center" class="align-self-start">
-          <v-col cols="11" sm="10" md="10" lg="9" xl="8">
-            <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">Ждем
-              ответа ¯\_(ツ)_/¯</h3>
+          <v-col cols="11" sm="10" md="10" lg="9" xl="8" align="center">
+            <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">
+              {{ answeringPlayer + " отвечает" }}</h3>
+            <v-spacer :style="{height: '5vw'}"/>
+            <WaitingLoader/>
           </v-col>
         </v-row>
       </template>
@@ -104,10 +106,11 @@ import SmallFab from "@/components/SmallFab";
 import TextField from "@/components/TextField";
 import FlipCard from "@/components/FlipCard";
 import States from "@/views/Games/Game/Shared/States";
+import WaitingLoader from "@/components/WaitingLoader";
 
 export default {
   name: "Player",
-  components: {FlipCard, TextField, SmallFab, BigFab, NavPage},
+  components: {WaitingLoader, FlipCard, TextField, SmallFab, BigFab, NavPage},
   props: {
     username: String,
     users: Array,

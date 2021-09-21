@@ -44,6 +44,7 @@
                 :height="100"
                 solo
                 v-model="username"
+                :placeholder="'Никнейм'"
                 :maxlength="10"
                 :error="loginError"
                 :error-messages="loginError?'Логин не должен быть пустым':''"
@@ -224,14 +225,20 @@ export default {
 
       this.WS = new WebSocket("ws://" + server.hostname + ":" + server.port + "/ws/" + this.sessionId + "/connect?token=" + this.username);
 
+      this.WS.onerror = (error) => {
+        console.error(error);
+        this.$router.push('/games/guess-the-melody');
+      };
+
       this.WS.onopen = () => {
         console.log('WebSocket opened');
 
         this.WS.onmessage = (data) => {
           this.serverMessagesHandler(data);
         }
+
         this.setState(States.Game.ROLE);
-      }
+      };
     },
 
     // HANDLERS - ROLE

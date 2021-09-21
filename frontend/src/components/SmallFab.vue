@@ -1,10 +1,11 @@
 <template>
   <v-btn
+    :class="'small-fab'"
     elevation="2"
     fab
     x-large
-    :height="100"
-    :width="100"
+    :height="'7vw'"
+    :width="'7vw'"
     @click="$emit('click')"
     :color="type==='back'? '#6DAAE8' : type==='forward'? '#FFCC00' : type==='check'? '#4CAF50' : type==='cross'? '#FC3F1D': type==='home'? '#FFCC00': undefined"
   >
@@ -84,6 +85,16 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 5vw;
+  height: 5vw;
+  min-height: 50px;
+  min-width: 50px;
+}
+
+.small-fab {
+  position: relative;
+  min-height: 80px;
+  min-width: 80px;
 }
 </style>
 
