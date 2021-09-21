@@ -6,7 +6,7 @@
     :height="100"
     :width="100"
     @click="$emit('click')"
-    :color="type==='back'? '#6DAAE8' : type==='forward'? '#FFCC00' : type==='check'? '#4CAF50' : type==='cross'? '#FC3F1D': undefined"
+    :color="type==='back'? '#6DAAE8' : type==='forward'? '#FFCC00' : type==='check'? '#4CAF50' : type==='cross'? '#FC3F1D': type==='home'? '#FFCC00': undefined"
   >
     <template v-if="type==='back'">
       <div class="icon-wrapper" style="margin-left: -12px">
@@ -51,6 +51,14 @@
     <template v-if="type==='text'">
       <div class="text-h8">{{ text }}</div>
     </template>
+
+    <template v-if="type==='home'">
+      <div class="icon-wrapper">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 40V28H28V40H38V24H44L24 6L4 24H10V40H20Z" fill="black"/>
+        </svg>
+      </div>
+    </template>
   </v-btn>
 </template>
 
@@ -61,7 +69,7 @@ export default {
     type: {
       // back, forward, check, cross, text
       type: String,
-      default: ''
+      required: true
     },
     text: {
       type: String,
