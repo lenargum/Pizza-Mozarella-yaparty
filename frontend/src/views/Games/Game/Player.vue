@@ -67,7 +67,10 @@
                justify="center" class="align-self-start">
           <v-col cols="11" sm="10" md="10" lg="9" xl="8" align="center">
             <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">
-              {{ answeringPlayer + " отвечает" }}</h3>
+              {{
+                answeringPlayer === username ? "Оценка ответа от независимых экспертов 🧐" : (answeringPlayer + " отвечает")
+              }}
+            </h3>
             <v-spacer :style="{height: '5vw'}"/>
             <WaitingLoader/>
           </v-col>
@@ -83,7 +86,10 @@
 
         <v-row align="center"
                justify="center" class="align-self-start">
-          <div class="answer-wrapper">
+          <div class="answer-wrapper answer-wrapper_waited">
+            <h4 class="text-h7 text-sm-h6 text-md-h5 text-lg-h5 text-xl-h4" style="text-align: start; padding-left: 8%">
+              {{ answeringPlayer + ":" }}
+            </h4>
             <v-text-field
               disabled
               :height="100"
@@ -180,7 +186,10 @@ export default {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    gap: 10px;
+
+    &_waited {
+      margin-top: -5vw;
+    }
   }
 }
 </style>
