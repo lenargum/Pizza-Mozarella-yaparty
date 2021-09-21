@@ -1,7 +1,7 @@
 <template>
   <v-col cols="12" sm="11" md="11" lg="7" xl="5" :align-self="'center'" :align="'center'">
     <div class="qrcode__wrapper"
-         @click.prevent="clickHandler"
+         @click.prevent="snackbar = true"
          :style="{'--cursor': copyOnClick? 'pointer': 'initial'}"
          :title="copyOnClick? 'Скопировать ссылку в буфер': ''"
     >
@@ -12,6 +12,28 @@
       />
     </div>
     <input class="qrcode__input-copy" type="hidden" id="testing-code" :value="value">
+    <v-snackbar
+      v-model="snackbar"
+    >
+      {{ error ? snackbarText.error : snackbarText.success }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+          :min-width="0"
+        >
+          <div class="qrcode__snackbar-icon">
+            <svg viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M53.173 18.3379L49.2716 14.4365L33.8045 29.9036L18.3374 14.4365L14.436 18.3379L29.9031 33.805L14.436 49.2721L18.3374 53.1735L33.8045 37.7064L49.2716 53.1735L53.173 49.2721L37.7059 33.805L53.173 18.3379Z"
+                fill="white"/>
+            </svg>
+          </div>
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-col>
 
 </template>
@@ -34,7 +56,15 @@ export default {
       default: false
     }
   },
-  data: () => ({}),
+  data: () => ({
+    snackbar: false,
+    error: false,
+    snackbarText:
+      {
+        success: 'Ссылка для приглашения в вашу игру скопирована успешно! 🥳',
+        error: 'Упс, скопировать не получилось ¯\\_(ツ)_/¯'
+      }
+  }),
   methods: {
     clickHandler() {
       if (this.copyOnClick) {
@@ -47,17 +77,12 @@ export default {
       testingCodeToCopy.select();
 
       try {
-        let successful = document.execCommand('copy');
-        if (successful) {
-          alert('Ссылка для приглашения на вашу сессию скопирована успешно! 🥳');
-        } else {
-          alert('Упс, скопировать не получилось ¯\\_(ツ)_/¯');
-        }
+        this.error = !!document.execCommand('copy');
+        this.snackbar = true;
       } catch (err) {
-        alert('Упс, скопировать не получилось ¯\\_(ツ)_/¯');
+        this.error = true;
       }
 
-      /* unselect the range */
       testingCodeToCopy.setAttribute('type', 'hidden');
       window.getSelection().removeAllRanges();
     },
@@ -75,6 +100,14 @@ export default {
   &__input-copy {
     //position: absolute;
     //top: -100px;
+  }
+
+  &__snackbar-icon {
+    width: 3vw;
+    height: 3vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>
