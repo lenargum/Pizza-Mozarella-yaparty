@@ -1,15 +1,16 @@
 <template>
   <v-btn
+    class="big-fab"
     elevation="2"
     fab
     x-large
-    :height="400"
-    :width="400"
+    :height="'20vw'"
+    :width="'20vw'"
     @click="$emit('click')"
     :disabled="!active"
     :color="color"
   >
-    <h2 class="text-h4">{{ text }}</h2>
+    <span class="big-fab__span text-h6 text-sm-h6 text-md-h5 text-lg-h5 text-xl-h4">{{ text }}</span>
   </v-btn>
 </template>
 
@@ -33,6 +34,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.app {
+  .big-fab {
+    min-width: 180px;
+    min-height: 180px;
 
+    &__span {
+      width: 75%;
+      word-break: normal;
+      white-space: break-spaces;
+    }
+  }
+}
 </style>
