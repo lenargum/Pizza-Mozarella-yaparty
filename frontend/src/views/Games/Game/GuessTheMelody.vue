@@ -25,7 +25,10 @@
                   вашего
                   смартфона чтобы начать</h3>
                 <v-row justify="center" align="center" no-gutters>
-                  <QRCode :value="qrcodeValue"/>
+                  <QRCode
+                    :value="qrcodeValue"
+                    :copyOnClick="true"
+                  />
                 </v-row>
               </v-col>
             </template>
