@@ -1,64 +1,100 @@
 <template>
-  <NavPage :header="currentState===states.Game.LOGIN? 'Логин': 'Угадай мелодию'"
-           :username="username"
-           :users="users"
-           :judge="judge"
-  >
-    <template v-if="currentState===states.Game.CREATE">
-      <SmallFab v-if="!loading" class="next-btn" @click="createGameBtnHandler" type="forward"/>
-      <v-row align="center"
-             justify="center" class="align-self-start">
-        <template v-if="loading">
-          <v-progress-circular
-            :size="70"
-            :width="7"
-            color="#ffcc00"
-            indeterminate
-          ></v-progress-circular>
+  <div class="main-wrapper">
+    <template v-if="currentState!==states.Game.PLAYING">
+      <NavPage :header="currentState===states.Game.LOGIN? 'Логин': 'Угадай мелодию'"
+               :username="username"
+               :users="users"
+               :judge="judge"
+      >
+        <template v-if="currentState===states.Game.CREATE">
+          <SmallFab v-if="!loading" class="next-btn" @click="createGameBtnHandler" type="forward"/>
+          <v-row align="center"
+                 justify="center" class="align-self-start">
+            <template v-if="loading">
+              <v-progress-circular
+                :size="70"
+                :width="7"
+                color="#ffcc00"
+                indeterminate
+              ></v-progress-circular>
+            </template>
+            <template v-else>
+              <v-col cols="11" sm="10" md="10" lg="7" xl="7">
+                <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">Отсканируйте
+                  с
+                  вашего
+                  смартфона чтобы начать</h3>
+                <v-row justify="center" align="center" no-gutters>
+                  <QRCode :value="qrcodeValue"/>
+                </v-row>
+              </v-col>
+            </template>
+          </v-row>
         </template>
-        <template v-else>
-          <v-col cols="11" sm="10" md="10" lg="7" xl="7">
-            <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">Отсканируйте с
-              вашего
-              смартфона чтобы начать</h3>
-            <v-row justify="center" align="center" no-gutters>
-              <QRCode :value="qrcodeValue"/>
-            </v-row>
-          </v-col>
+        <template v-else-if="currentState===states.Game.LOGIN">
+          <TextField>
+            <template #default>
+              <v-text-field
+                autofocus
+                clearable
+                :counter="10"
+                :height="100"
+                solo
+                v-model="username"
+                :maxlength="10"
+                :error="loginError"
+                :error-messages="loginError?'Логин не должен быть пустым':''"
+                @keydown.enter="loginHandler"
+              />
+            </template>
+            <template #button>
+              <SmallFab @click="loginHandler" type="forward"/>
+            </template>
+          </TextField>
         </template>
-      </v-row>
+        <template v-else-if="currentState===states.Game.ROLE">
+          <v-row align="center"
+                 justify="center" class="align-self-start">
+            <v-spacer/>
+            <BigFab @click="playerChoiceHandler" text="Стать игроком"/>
+            <v-spacer/>
+            <BigFab @click="judgeChoiceHandler" text="Стать ведущим" :active="!judge" :color="'#FFCC00'"/>
+            <v-spacer/>
+          </v-row>
+        </template>
+      </NavPage>
     </template>
-    <template v-else-if="currentState===states.Game.LOGIN">
-      <TextField>
-        <template #default>
-          <v-text-field
-            autofocus
-            clearable
-            :counter="10"
-            :height="100"
-            solo
-            v-model="username"
-            :maxlength="10"
-            :error="loginError"
-            :error-messages="loginError?'Логин не должен быть пустым':''"
-          />
-        </template>
-        <template #button>
-          <SmallFab @click="loginHandler" type="forward"/>
-        </template>
-      </TextField>
+    <template v-else>
+      <LeaderBoard v-if="scoreboard" :scoreboard="scoreboard" :username="username"/>
+      <Player v-else-if="judge!==username"
+              :username="username"
+              :users="users"
+              :sessionId="sessionId"
+              :judge="judge"
+              :state="playerState"
+              :WS="WS"
+              :answering-player="answeringPlayer"
+              :song="song"
+              :answerIsCorrect="answerIsCorrect"
+              :given-answer="givenAnswer"
+              :score="score"
+              @changeState="setPlayerState"
+      />
+      <Judge v-else
+             :username="username"
+             :users="users"
+             :sessionId="sessionId"
+             :judge="judge"
+             :state="judgeState"
+             :WS="WS"
+             :answering-player="answeringPlayer"
+             :song="song"
+             :answerIsCorrect="answerIsCorrect"
+             :given-answer="givenAnswer"
+             @changeState="setJudgeState"
+      />
     </template>
-    <template v-else-if="currentState===states.Game.ROLE">
-      <v-row align="center"
-             justify="center" class="align-self-start">
-        <v-spacer/>
-        <BigFab @click="playerChoiceHandler" text="Стать игроком"/>
-        <v-spacer/>
-        <BigFab @click="judgeChoiceHandler" text="Стать ведущим" :active="!judge" :color="'#FFCC00'"/>
-        <v-spacer/>
-      </v-row>
-    </template>
-  </NavPage>
+  </div>
 </template>
 
 <script>
@@ -71,9 +107,16 @@ import QRCode from "@/components/QRCode";
 import server from "@/data/hosts";
 import States from "@/views/Games/Game/Shared/States";
 
+import Player from "@/views/Games/Game/Player";
+import Judge from "@/views/Games/Game/Judge";
+import LeaderBoard from "@/views/Games/Game/LeaderBoard";
+
 export default {
-  name: "MobileLogin",
+  name: "GuessTheMelody",
   components: {
+    LeaderBoard,
+    Judge,
+    Player,
     TextField,
     SmallFab,
     NavPage,
@@ -86,8 +129,10 @@ export default {
     sessionId: "",
     username: "",
     users: [],
-    judge: '',
+    judge: "",
     WS: undefined,
+    answeringPlayer: "",
+    givenAnswer: "",
 
     // create
     btnPressed: false,
@@ -98,7 +143,19 @@ export default {
     // login
     loginError: false,
 
+    // player
+    playerState: States.Player.STARTING,
+    score: "",
 
+    // judge
+    judgeState: States.Judge.STARTING,
+
+    // song
+    song: {},
+    answerIsCorrect: undefined,
+
+    started: false,
+    scoreboard: undefined,
   }),
   methods: {
     // COMMON
@@ -139,6 +196,12 @@ export default {
     setState(state) {
       this.currentState = state;
     },
+    setPlayerState(state) {
+      this.playerState = state;
+    },
+    setJudgeState(state) {
+      this.judgeState = state;
+    },
 
     // HANDLERS
 
@@ -170,12 +233,13 @@ export default {
 
     // HANDLERS - ROLE
     playerChoiceHandler() {
-      this.$router.push('/play/player');
+      this.setState(States.Game.PLAYING);
     },
     async judgeChoiceHandler() {
       const judge_role_request_json = {"session_id": this.sessionId, "event_type": 2, "payload": {"update_role": true}};
       await this.WS.send(JSON.stringify(judge_role_request_json));
-      await this.$router.push('/play/judge');
+
+      this.setState(States.Game.PLAYING);
     },
 
     // HANDLERS - COMMON
@@ -202,7 +266,7 @@ export default {
     serverMessagesHandler(data) {
       let response;
       try {
-        response = JSON.parse(data.data);
+        response = JSON.parse(JSON.parse(data.data));
         console.log();
         if (typeof response == "string") {
           console.warn("JSON is string");
@@ -223,48 +287,84 @@ export default {
       switch (status) {
         case 1:
           if (payload.clients) {
-            this.setUsers(payload.clients.map((client_base64) => (atob(client_base64))));
-            if (payload.judge) this.setJudge(atob(payload.judge));
-          } else if (payload.event) {
-            switch (payload.event) {
-              case "answer":
-                // todo: playerToAnswering()
-                break;
-            }
+            this.setUsers(payload.clients);
+            if (payload.judge) this.setJudge(payload.judge);
           }
           break;
         case 2:
 
           break;
         case 3:
-          switch (payload.event) {
-            case "connected":
-              this.userConnected(atob(payload.client));
-              break;
-            case "disconnected":
-              this.userDisconnected(atob(payload.client));
-              break;
+          if (payload.event) {
+            switch (payload.event) {
+              case "connected":
+                this.userConnected(payload.client);
+                break;
+              case "disconnected":
+                this.userDisconnected(payload.client);
+                break;
+            }
+          } else if (payload.song && payload.answer && "answer_correct" in payload) {
+            this.playerState = States.Player.WAITED;
+            this.song = payload.song;
+            this.givenAnswer = payload.answer;
+            setTimeout(() => (this.answerIsCorrect = payload.answer_correct), 3000);
+          } else if (payload.score_board) {
+            this.scoreboard = payload.score_board.map((line) => ({username: line[0], score: line[1]}));
+            this.scoreboard = this.scoreboard.filter((record) => (record.username !== this.judge));
           }
           break;
         case 4:
+          if (payload.event) {
+            switch (payload.event) {
+              case "judge":
+                this.setJudge(payload.judge);
+                break;
+              case "play":
 
-          switch (payload.event) {
-            case "judge":
-              this.setJudge(atob(payload.judge));
-              break;
-            case "play":
-              // TODO: handle start of the game
+                this.answeringPlayer = "";
+                this.givenAnswer = "";
+                if (this.judge !== this.username && !this.started) this.score = "0";
+                this.song = {};
+                this.answerIsCorrect = undefined;
 
-              // this.playerToStarting();
-              // WS.started = true
-              break;
-            case "answer":
-            // todo: uncomment and connect
-            // answeringPlayer = payload.first
-            // playerToWaiting
+                this.playerState = States.Player.READY;
+                this.judgeState = States.Judge.READY;
+                this.started = true;
+                break;
+              case "answer":
+                if (payload.first) {
+                  this.answeringPlayer = payload.first;
+                  if (this.username === this.answeringPlayer) {
+                    this.playerState = States.Player.ANSWERING;
+                  } else {
+                    this.playerState = States.Player.WAITING;
+                  }
+                  this.judgeState = States.Judge.ANSWERING;
+                }
+                break;
+            }
+            break;
           }
-          break;
+
+          if ("answer_correct" in payload && payload.song && payload.answer && payload.score) {
+            this.playerState = States.Player.ANSWERED;
+            this.song = payload.song;
+            this.givenAnswer = payload.answer;
+            setTimeout(() => (this.score = payload.score.toString()), 3000);
+            setTimeout(this.setAnswerIsCorrect, 3000, payload.answer_correct);
+          } else if (payload.answer && payload.song) {
+            this.givenAnswer = payload.answer;
+            this.song = payload.song;
+            this.judgeState = States.Judge.CHECKING;
+            this.playerState = States.Player.WAITING;
+            // todo: consider no-judge game mode
+          } else
+            break;
       }
+    },
+    setAnswerIsCorrect(value) {
+      this.answerIsCorrect = value;
     },
   },
   watch: {
@@ -285,6 +385,12 @@ export default {
     transform: translate(-50%, -50%);
     top: 50vh;
     right: 0;
+  }
+
+  .main-wrapper {
+    flex: 1 1 auto;
+    max-width: 100%;
+    position: relative;
   }
 }
 </style>

@@ -71,7 +71,7 @@ export default {
   },
   data: () => ({
     drawerIsOpen: false,
-    hasDrawer: true
+    hasDrawer: false
   }),
   mounted() {
   }

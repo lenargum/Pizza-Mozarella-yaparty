@@ -4,22 +4,13 @@
     :username="username"
     :users="users"
     :score="score"
+    :judge="judge"
   >
-    <template v-if="judge!==username" #debug>
-      Player debugger
-      <v-btn v-for="state in states.Player"
-             @click="stateSwitcher(state)"
-             :key="state"
-             :disabled="state===$props.state"
-      >{{ state }}
-      </v-btn>
-    </template>
     <template>
-
       <template v-if="state===states.Player.STARTING">
         <v-row align="center"
                justify="center" class="align-self-start">
-          <v-col cols="11" sm="10" md="10" lg="4" xl="4">
+          <v-col cols="11" sm="10" md="10" lg="9" xl="8">
             <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">Ожидание начала
               игры</h3>
           </v-col>
@@ -42,7 +33,8 @@
               :height="100"
               solo
               label="Ответ"
-              v-model="givenAnswer"
+              v-model="answer"
+              @keydown.enter="submitAnswerBtnHandler"
             />
           </template>
           <template #button>
@@ -55,14 +47,25 @@
         <v-row align="center"
                justify="center" class="align-self-start">
           <FlipCard :answer-color="answerIsCorrect===undefined? '#ffcc00': answerIsCorrect? '#5acc5eff': '#FC3F1D'"
-                    :artist="artist" :track="track" :turned="answerIsCorrect!==undefined"/>
+                    :artist="song.author" :track="song.name" :turned="answerIsCorrect!==undefined"/>
+        </v-row>
+        <v-row align="center"
+               justify="center" class="align-self-start">
+          <div class="answer-wrapper">
+            <v-text-field
+              disabled
+              :height="100"
+              solo
+              :value="givenAnswer"
+            />
+          </div>
         </v-row>
       </template>
 
       <template v-if="state===states.Player.WAITING">
         <v-row align="center"
                justify="center" class="align-self-start">
-          <v-col cols="11" sm="10" md="10" lg="4" xl="4">
+          <v-col cols="11" sm="10" md="10" lg="9" xl="8">
             <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">Ждем
               ответа ¯\_(ツ)_/¯</h3>
           </v-col>
@@ -72,7 +75,20 @@
       <template v-if="state===states.Player.WAITED">
         <v-row align="center"
                justify="center" class="align-self-start">
-          <FlipCard :answer-color="'#ffcc00'" :artist="artist" :track="track" :turned="answerIsCorrect!==undefined"/>
+          <FlipCard :answer-color="answerIsCorrect===undefined? '#ffcc00': answerIsCorrect? '#5acc5eff': '#FC3F1D'"
+                    :artist="song.author" :track="song.name" :turned="answerIsCorrect!==undefined"/>
+        </v-row>
+
+        <v-row align="center"
+               justify="center" class="align-self-start">
+          <div class="answer-wrapper">
+            <v-text-field
+              disabled
+              :height="100"
+              solo
+              :value="givenAnswer"
+            />
+          </div>
         </v-row>
       </template>
 
@@ -87,7 +103,6 @@ import BigFab from "@/components/BigFab";
 import SmallFab from "@/components/SmallFab";
 import TextField from "@/components/TextField";
 import FlipCard from "@/components/FlipCard";
-import WS from "@/views/Games/Game/Shared/ws";
 import States from "@/views/Games/Game/Shared/States";
 
 export default {
@@ -100,126 +115,69 @@ export default {
     judge: String,
     state: String,
     WS: WebSocket,
+    answeringPlayer: String,
+    givenAnswer: String,
     song: Object,
     answerIsCorrect: Boolean,
+    score: String,
   },
   data: () => ({
-    score: "",
-
     states: States,
     // p_starting, p_ready, p_answering, p_answered, p_waiting, p_waited
 
-    givenAnswer: 'пошлая молли',
-    track: 'Новый мерин',
-    artist: 'Моргенштерн',
+    answer: '',
   }),
   methods: {
-    setState(state) {
-      this.state = state;
-    },
-    setAnswerIsCorrect(value) {
-      this.track = 'Новый мерин'; //todo: remove
-      this.artist = 'Моргенштерн'; //todo: remove
-
-      this.answerIsCorrect = value;
-    },
-
-    stateSwitcher(state) {
-      switch (state) {
-        case this.states.Player.STARTING:
-          this.playerToStarting();
-          break;
-        case this.states.Player.READY:
-          this.playerToReady();
-          break;
-        case this.states.Player.ANSWERING:
-          this.playerToAnswering();
-          break;
-        case this.states.Player.ANSWERED:
-          this.playerToAnswered();
-          break;
-        case this.states.Player.WAITING:
-          this.playerToWaiting();
-          break;
-        case this.states.Player.WAITED:
-          this.playerToWaited();
-          break;
-      }
-    },
-
-    //p_starting
-    playerToStarting() {
-      this.setAnswerIsCorrect(undefined);
-      this.score = '0';
-      this.givenAnswer = '';
-      this.track = '';
-      this.artist = '';
-      this.setState(States.Player.STARTING);
-    },
-
-    //p_ready
-    playerToReady() {
-      this.setAnswerIsCorrect(undefined);
-      this.givenAnswer = '';
-      this.track = '';
-      this.artist = '';
-      this.setState(States.Player.READY);
-    },
     async answerBtnHandler() {
-      // check if he was fast enough, instead of true
-      const answering = true; // todo: handle
-
       const data_json = {
         "session_id": this.sessionId, "event_type": 2, "payload": {"event": "answer"}
       };
-      await WS.socket.send(JSON.stringify(data_json));
-
-      if (answering) {
-        // todo: handle state change inside listener
-        this.setState(States.Player.ANSWERING);
-      } else {
-        this.setState(States.Player.WAITING);
-      }
+      await this.WS.send(JSON.stringify(data_json));
     },
 
-    //p_answering
-    playerToAnswering() {
-      this.setState(States.Player.ANSWERING);
-    },
     async submitAnswerBtnHandler() {
       const data_json = {
-        "session_id": this.sessionId, "event_type": 2, "payload": {"answer": this.givenAnswer}
+        "session_id": this.sessionId, "event_type": 2, "payload": {"answer": this.answer}
       };
-      await WS.socket.send(JSON.stringify(data_json));
-      this.givenAnswer = "";
-
-      // this.answerIsCorrect = true;
-      const answerCorrect = true; // todo: handle to commented above var
-
-      if (answerCorrect) {
-        this.setState(States.Player.ANSWERED);
-        this.score = (parseInt(this.score) + 100).toString();
-        setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: handle
-      }
+      await this.WS.send(JSON.stringify(data_json));
+      this.answer = "";
+      this.$emit("changeState", States.Player.WAITING);
     },
-
-    //p_answered
-    playerToAnswered() {
-      this.setState(States.Player.ANSWERED);
-    },
-
-
-    //p_waiting
-    playerToWaiting() {
-      this.setState(States.Player.WAITING);
-    },
-
-    //p_waited
-    playerToWaited() {
-      this.setState(States.Player.WAITED);
-      setTimeout(this.setAnswerIsCorrect, 3000, true); // todo: replace true (stub)
-    },
-
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.app {
+  .v-input {
+    font-size: 1.5em !important;
+  }
+
+  .v-label {
+    font-size: 1.5em !important;
+    padding: 0 20px;
+  }
+
+  .v-icon {
+    font-size: 2.5em !important;
+  }
+
+  .v-btn {
+    font-size: 1.5em !important;
+  }
+
+  .input-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+
+  .answer-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+}
+</style>
