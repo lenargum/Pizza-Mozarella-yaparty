@@ -1,7 +1,7 @@
 <template>
   <v-col cols="12" sm="11" md="11" lg="7" xl="5" :align-self="'center'" :align="'center'">
     <div class="qrcode__wrapper"
-         @click.prevent="snackbar = true"
+         @click.prevent="clickHandler"
          :style="{'--cursor': copyOnClick? 'pointer': 'initial'}"
          :title="copyOnClick? 'Скопировать ссылку в буфер': ''"
     >
@@ -77,7 +77,7 @@ export default {
       testingCodeToCopy.select();
 
       try {
-        this.error = !!document.execCommand('copy');
+        this.error = !document.execCommand('copy');
         this.snackbar = true;
       } catch (err) {
         this.error = true;
