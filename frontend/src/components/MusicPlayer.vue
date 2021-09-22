@@ -3,7 +3,7 @@
     <div class="music-player">
       <h3 class="music-player__counter text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">
         {{ counter }}</h3>
-      <svg :class="{'rotating': rotating}" width="399" height="399" viewBox="0 0 399 399" fill="none"
+      <svg :class="{'rotating': rotating}" viewBox="0 0 399 399" fill="none"
            xmlns="http://www.w3.org/2000/svg">
         <g filter="url(#filter0_d)">
           <circle cx="199.5" cy="199.5" r="179.5" fill="#222222"/>
@@ -80,21 +80,23 @@ export default {
 
 <style lang="scss" scoped>
 .music-player {
-  width: 388px;
-  height: 388px;
-  line-height: 388px;
+  width: 25vw;
+  height: 25vw;
+  line-height: 25vw;
   text-align: center;
 
   &__wrapper {
-    width: 420px;
-    height: 420px;
+    width: 26.8vw;
+    height: 26.8vw;
     overflow: hidden;
   }
 
   &__counter {
     position: absolute;
-    top: 51%;
-    left: 49.5%;
+    //top: 51%;
+    //left: 49.5%;
+    top: 51.5%;
+    left: 49%;
   }
 }
 
