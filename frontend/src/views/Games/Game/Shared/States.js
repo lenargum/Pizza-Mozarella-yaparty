@@ -19,7 +19,8 @@ const States = {
     CREATE: "create",
     LOGIN: "login",
     ROLE: "role",
-    PLAYING: "playing"
+    PLAYING: "playing",
+    SCOREBOARD: "scoreboard"
   }
 };
 export default States;

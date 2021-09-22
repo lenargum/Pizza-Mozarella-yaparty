@@ -9,7 +9,6 @@ import GamesWrapper from "@/views/GamesWrapper";
 import GamesLibrary from "@/views/Games/GamesLibrary";
 import GuessTheMelody from "@/views/Games/Game/GuessTheMelody";
 import Playlist from "@/views/Playlist";
-import PlayMusic from "@/views/Games/Game/PlayMusic";
 
 
 Vue.use(VueRouter);
@@ -66,11 +65,6 @@ const routes = [
     path: '/playlist/:id',
     name: 'Playlist',
     component: Playlist
-  },
-  {
-    path: '/play/music',
-    name: 'PlayMusic',
-    component: PlayMusic
   },
   {
     path: '/in-progress',

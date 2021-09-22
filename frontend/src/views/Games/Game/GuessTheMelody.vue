@@ -1,6 +1,6 @@
 <template>
   <div class="main-wrapper">
-    <template v-if="currentState!==states.Game.PLAYING">
+    <template v-if="currentState!==states.Game.PLAYING && currentState!==states.Game.SCOREBOARD">
       <NavPage :header="currentState===states.Game.LOGIN? 'Логин': 'Угадай мелодию'"
                :username="username"
                :users="users"
@@ -68,8 +68,15 @@
         </template>
       </NavPage>
     </template>
-    <template v-else>
-      <LeaderBoard v-if="scoreboard" :scoreboard="scoreboard" :username="username"/>
+    <template v-else-if="currentState===states.Game.PLAYING">
+      <template v-if="host">
+        <NavPage :header="'Угадай мелодию'" :users="users" :judge="judge" :username="'Главный экран'">
+          <v-row align="center"
+                 justify="center" class="align-self-start">
+            <MusicPlayer :rotating="musicIsPlaying"/>
+          </v-row>
+        </NavPage>
+      </template>
       <Player v-else-if="judge!==username"
               :username="username"
               :users="users"
@@ -98,6 +105,9 @@
              @changeState="setJudgeState"
       />
     </template>
+    <template v-else-if="currentState===states.Game.SCOREBOARD">
+      <LeaderBoard :scoreboard="scoreboard" :username="username"/>
+    </template>
   </div>
 </template>
 
@@ -114,10 +124,12 @@ import States from "@/views/Games/Game/Shared/States";
 import Player from "@/views/Games/Game/Player";
 import Judge from "@/views/Games/Game/Judge";
 import LeaderBoard from "@/views/Games/Game/LeaderBoard";
+import MusicPlayer from "@/components/MusicPlayer";
 
 export default {
   name: "GuessTheMelody",
   components: {
+    MusicPlayer,
     LeaderBoard,
     Judge,
     Player,
@@ -143,6 +155,10 @@ export default {
     qrcodeValue: "не ну а че)",
     sessionURL: '',
     loading: true,
+
+    // host (desktop)
+    host: false,
+    musicIsPlaying: false,
 
     // login
     loginError: false,
@@ -185,6 +201,7 @@ export default {
 
 
     // SETTERS
+    // todo: replace all assignments with setters
     setJudge(user) {
       if (user) {
         console.log("USER '" + user + "' IS JUDGE");
@@ -206,12 +223,44 @@ export default {
     setJudgeState(state) {
       this.judgeState = state;
     },
+    setAnswerIsCorrect(value) {
+      this.answerIsCorrect = value;
+    },
+    setMusicIsPlaying(value, audio) {
+      this.musicIsPlaying = value;
+      if (value) {
+        audio.onended = () => {
+          this.musicIsPlaying = false;
+        }
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    },
 
     // HANDLERS
 
     // HANDLERS - CREATE
     createGameBtnHandler() {
+      this.host = true;
       this.$router.push(this.sessionURL);
+
+      this.WS = new WebSocket("ws://" + server.hostname + ":" + server.port + "/ws/" + this.sessionId + "/desktop");
+
+      this.WS.onerror = (error) => {
+        console.error(error);
+        this.$router.push('/games/guess-the-melody');
+      };
+
+      this.WS.onopen = () => {
+        console.log('Desktop WebSocket opened');
+
+        this.WS.onmessage = (data) => {
+          this.serverMessagesHandler(data);
+        }
+
+        this.setState(States.Game.PLAYING);
+      };
     },
 
     // HANDLERS - LOGIN
@@ -270,6 +319,9 @@ export default {
         this.sessionId = data.session_id;
         this.sessionURL = "/games/guess-the-melody/" + data.session_id;
         this.qrcodeValue = window.location.protocol + "//" + window.location.host + this.sessionURL;
+
+        // todo: start desktop connection here
+
         this.loading = false;
       }
     },
@@ -322,6 +374,7 @@ export default {
           } else if ("score_board" in payload) {
             this.scoreboard = payload.score_board.map((line) => ({username: line[0], score: line[1]}));
             this.scoreboard = this.scoreboard.filter((record) => (record.username !== this.judge));
+            this.setState(States.Game.SCOREBOARD);
           }
           break;
         case 4:
@@ -334,7 +387,7 @@ export default {
 
                 this.answeringPlayer = "";
                 this.givenAnswer = "";
-                if (this.judge !== this.username && !this.started) this.score = "0";
+                if (this.judge !== this.username && !this.started && !this.host) this.score = "0";
                 this.song = {};
                 this.answerIsCorrect = undefined;
 
@@ -354,10 +407,7 @@ export default {
                 }
                 break;
             }
-            break;
-          }
-
-          if ("answer_correct" in payload && "song" in payload && "answer" in payload && "score" in payload) {
+          } else if ("answer_correct" in payload && "song" in payload && "answer" in payload && "score" in payload) {
             this.playerState = States.Player.ANSWERED;
             this.song = payload.song;
             this.givenAnswer = payload.answer;
@@ -369,12 +419,12 @@ export default {
             this.judgeState = States.Judge.CHECKING;
             this.playerState = States.Player.WAITING;
             // todo: consider no-judge game mode
-          } else
-            break;
+          } else if ("song64" in payload) {
+            let snd = new Audio("data:audio/mp3;base64," + payload.song64);
+            setTimeout(() => (this.setMusicIsPlaying(true, snd)), 3000);
+          }
+          break;
       }
-    },
-    setAnswerIsCorrect(value) {
-      this.answerIsCorrect = value;
     },
   },
   watch: {
