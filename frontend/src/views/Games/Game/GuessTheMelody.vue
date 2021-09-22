@@ -73,7 +73,12 @@
         <NavPage :header="'Угадай мелодию'" :users="users" :judge="judge" :username="'Главный экран'">
           <v-row align="center"
                  justify="center" class="align-self-start">
-            <MusicPlayer :rotating="musicIsPlaying"/>
+            <v-col align="center">
+              <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">
+                {{ counter }}</h3>
+              <v-spacer :style="{height: '2vw'}"/>
+              <MusicPlayer :rotating="musicIsPlaying"/>
+            </v-col>
           </v-row>
         </NavPage>
       </template>
@@ -159,6 +164,8 @@ export default {
     // host (desktop)
     host: false,
     musicIsPlaying: false,
+    counter: "",
+    songAudio: undefined,
 
     // login
     loginError: false,
@@ -226,15 +233,15 @@ export default {
     setAnswerIsCorrect(value) {
       this.answerIsCorrect = value;
     },
-    setMusicIsPlaying(value, audio) {
+    setMusicIsPlaying(value) {
       this.musicIsPlaying = value;
       if (value) {
-        audio.onended = () => {
+        this.songAudio.onended = () => {
           this.musicIsPlaying = false;
         }
-        audio.play();
+        this.songAudio.play();
       } else {
-        audio.pause();
+        this.songAudio.pause();
       }
     },
 
@@ -304,8 +311,10 @@ export default {
     // HANDLERS - COMMON
     async sessionIdHandler(sessionId) {
       if (sessionId) {
-        this.setState(States.Game.LOGIN);
         this.sessionId = sessionId;
+        if (!this.host) {
+          this.setState(States.Game.LOGIN);
+        }
       } else {
         this.setState(States.Game.CREATE);
         const requestOptions = {
@@ -321,7 +330,22 @@ export default {
         this.qrcodeValue = window.location.protocol + "//" + window.location.host + this.sessionURL;
 
         // todo: start desktop connection here
+        this.host = true;
 
+        this.WS = new WebSocket("ws://" + server.hostname + ":" + server.port + "/ws/" + this.sessionId + "/desktop");
+
+        this.WS.onerror = (error) => {
+          console.error(error);
+          this.$router.push('/games/guess-the-melody');
+        };
+
+        this.WS.onopen = () => {
+          console.log('Desktop WebSocket opened');
+
+          this.WS.onmessage = (data) => {
+            this.serverMessagesHandler(data);
+          }
+        };
         this.loading = false;
       }
     },
@@ -398,6 +422,9 @@ export default {
               case "answer":
                 if ("first" in payload) {
                   this.answeringPlayer = payload.first;
+                  if (this.host) {
+                    this.setMusicIsPlaying(false);
+                  }
                   if (this.username === this.answeringPlayer) {
                     this.playerState = States.Player.ANSWERING;
                   } else {
@@ -420,8 +447,16 @@ export default {
             this.playerState = States.Player.WAITING;
             // todo: consider no-judge game mode
           } else if ("song64" in payload) {
-            let snd = new Audio("data:audio/mp3;base64," + payload.song64);
-            setTimeout(() => (this.setMusicIsPlaying(true, snd)), 3000);
+            if (!this.started) {
+              this.$router.push(this.sessionURL);
+              this.setState(States.Game.PLAYING);
+            }
+            this.songAudio = new Audio("data:audio/mp3;base64," + payload.song64);
+            this.counter = "3";
+            setTimeout(() => (this.setMusicIsPlaying(true)), 3000);
+            setTimeout(() => (this.counter = " "), 3000);
+            setTimeout(() => (this.counter = "1"), 2000);
+            setTimeout(() => (this.counter = "2"), 1000);
           }
           break;
       }
