@@ -1,6 +1,8 @@
 <template>
   <div class="music-player__wrapper">
     <div class="music-player">
+      <h3 class="music-player__counter text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">
+        {{ counter }}</h3>
       <svg :class="{'rotating': rotating}" width="399" height="399" viewBox="0 0 399 399" fill="none"
            xmlns="http://www.w3.org/2000/svg">
         <g filter="url(#filter0_d)">
@@ -67,6 +69,10 @@ export default {
     rotating: {
       type: Boolean,
       default: false
+    },
+    counter: {
+      type: String,
+      default: ""
     }
   }
 }
@@ -83,6 +89,12 @@ export default {
     width: 420px;
     height: 420px;
     overflow: hidden;
+  }
+
+  &__counter {
+    position: absolute;
+    top: 51%;
+    left: 49.5%;
   }
 }
 

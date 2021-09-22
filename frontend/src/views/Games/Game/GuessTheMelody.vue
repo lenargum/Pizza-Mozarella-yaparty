@@ -1,6 +1,8 @@
 <template>
   <div class="main-wrapper">
-    <template v-if="currentState!==states.Game.PLAYING && currentState!==states.Game.SCOREBOARD">
+    <template
+      v-if="currentState===states.Game.CREATE || currentState===states.Game.LOGIN || currentState===states.Game.ROLE"
+    >
       <NavPage :header="currentState===states.Game.LOGIN? 'Логин': 'Угадай мелодию'"
                :username="username"
                :users="users"
@@ -73,10 +75,7 @@
           <v-row align="center"
                  justify="center" class="align-self-start">
             <v-col align="center">
-              <h3 class="text-h5 text-sm-h4 text-md-h3 text-lg-h3 text-xl-h2" style="text-align: center">
-                {{ counter }}</h3>
-              <v-spacer :style="{height: '2vw'}"/>
-              <MusicPlayer :rotating="musicIsPlaying"/>
+              <MusicPlayer :rotating="musicIsPlaying" :counter="counter"/>
             </v-col>
           </v-row>
         </NavPage>
@@ -455,5 +454,7 @@ export default {
     max-width: 100%;
     position: relative;
   }
+
+
 }
 </style>
