@@ -7,7 +7,6 @@
                :judge="judge"
       >
         <template v-if="currentState===states.Game.CREATE">
-          <SmallFab v-if="!loading" class="next-btn" @click="createGameBtnHandler" type="forward"/>
           <v-row align="center"
                  justify="center" class="align-self-start">
             <template v-if="loading">
@@ -247,29 +246,6 @@ export default {
 
     // HANDLERS
 
-    // HANDLERS - CREATE
-    createGameBtnHandler() {
-      this.host = true;
-      this.$router.push(this.sessionURL);
-
-      this.WS = new WebSocket("ws://" + server.hostname + ":" + server.port + "/ws/" + this.sessionId + "/desktop");
-
-      this.WS.onerror = (error) => {
-        console.error(error);
-        this.$router.push('/games/guess-the-melody');
-      };
-
-      this.WS.onopen = () => {
-        console.log('Desktop WebSocket opened');
-
-        this.WS.onmessage = (data) => {
-          this.serverMessagesHandler(data);
-        }
-
-        this.setState(States.Game.PLAYING);
-      };
-    },
-
     // HANDLERS - LOGIN
     loginHandler() {
       if (!this.username.length) {
@@ -329,7 +305,6 @@ export default {
         this.sessionURL = "/games/guess-the-melody/" + data.session_id;
         this.qrcodeValue = window.location.protocol + "//" + window.location.host + this.sessionURL;
 
-        // todo: start desktop connection here
         this.host = true;
 
         this.WS = new WebSocket("ws://" + server.hostname + ":" + server.port + "/ws/" + this.sessionId + "/desktop");
@@ -475,13 +450,6 @@ export default {
 
 <style lang="scss" scoped>
 .app {
-  .next-btn {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    top: 50vh;
-    right: 0;
-  }
-
   .main-wrapper {
     flex: 1 1 auto;
     max-width: 100%;
