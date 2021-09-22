@@ -424,6 +424,7 @@ export default {
             if (!this.started) {
               this.$router.push(this.sessionURL);
               this.setState(States.Game.PLAYING);
+              this.started = true;
             }
             this.songAudio = new Audio("data:audio/mp3;base64," + payload.song64);
             this.counter = "3";
