@@ -1,46 +1,49 @@
 <template>
   <Page :style="'background-color: fff;'">
-    <div class="page__wrapper">
+    <div class="page__bg">
       <div class="page__logo">
         <Logo :is-black="false"/>
       </div>
-      <div class="page__content">
-        <div @click="navigateToStub" class="page__service">
-          <Tile :hoverable="true" :label="'Афиша'" :img="'afisha'" :tile-color="'#FFCC00'"/>
-          <span class="page__service-text">
+      <div class="page__wrapper">
+        <div class="page__content">
+          <div @click="navigateToStub" class="page__service">
+            <Tile class="page__service-tile" :hoverable="true" :label="'Афиша'" :img="'afisha'"
+                  :tile-color="'#FFCC00'"/>
+            <span class="page__service-text">
             Найдём мероприятие
           </span>
-        </div>
+          </div>
 
-        <div @click="roomId? $router.push('/playlist/'+roomId) : navigateToCreateRoom()" class="page__service">
-          <Tile :hoverable="true" :label="'Плейлист вечеринки'" :img="'party-playlist'"
-                :tile-color="'#6DAAE8'"/>
-          <span class="page__service-text">
+          <div @click="roomId? $router.push('/playlist/'+roomId) : navigateToCreateRoom()" class="page__service">
+            <Tile class="page__service-tile" :hoverable="true" :label="'Плейлист вечеринки'" :img="'party-playlist'"
+                  :tile-color="'#6DAAE8'"/>
+            <span class="page__service-text">
             Соберём плейлист
           </span>
-        </div>
+          </div>
 
-        <div @click="navigateToStub" class="page__service">
-          <Tile :hoverable="true" :label="'Еда'" :img="'eda'" :tile-color="'#FFCC00'"/>
-          <span class="page__service-text">
+          <div @click="navigateToStub" class="page__service">
+            <Tile class="page__service-tile" :hoverable="true" :label="'Еда'" :img="'eda'" :tile-color="'#FFCC00'"/>
+            <span class="page__service-text">
             Организуем закуски
           </span>
-        </div>
+          </div>
 
-        <div @click="navigateToStub" class="page__service">
-          <Tile :hoverable="true" :label="'Кино'" :img="'kino'" :text-color="'#fff'"
-                :tile-color="'#777'"/>
-          <span class="page__service-text">
+          <div @click="navigateToStub" class="page__service">
+            <Tile class="page__service-tile" :hoverable="true" :label="'Кино'" :img="'kino'" :text-color="'#fff'"
+                  :tile-color="'#777'"/>
+            <span class="page__service-text">
             Подскажем, что посмотреть
           </span>
-        </div>
+          </div>
 
-        <div @click="$router.push('/games')" class="page__service">
-          <Tile :hoverable="true" :label="'Игры'" :img="'games'" :text-color="'#fff'"
-                :tile-color="'#FC3F1D'"/>
-          <span class="page__service-text">
+          <div @click="$router.push('/games')" class="page__service">
+            <Tile class="page__service-tile" :hoverable="true" :label="'Игры'" :img="'games'" :text-color="'#fff'"
+                  :tile-color="'#FC3F1D'"/>
+            <span class="page__service-text">
             Не дадим заскучать
           </span>
+          </div>
         </div>
       </div>
     </div>
@@ -77,7 +80,7 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  &__wrapper {
+  &__bg {
     position: relative;
     background-image: url("/static/disco.png");
     background-size: cover;
@@ -87,43 +90,52 @@ export default {
 
     display: flex;
     flex-wrap: nowrap;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
   }
 
-  &__logo {
-    position: absolute;
-    top: 50px;
-    left: 50px;
+  &__wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    flex-basis: 100%;
   }
 
   &__content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
     width: 100%;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    justify-content: space-between;
-    gap: 10px;
+    justify-content: center;
+    gap: 4vw;
 
-    padding: 0 5%;
+    padding: 0 4vw;
+    zoom: 75%;
+  }
+
+  &__logo {
+    justify-self: start;
+    align-self: start;
+    margin: 4vw 0 0 4vw;
   }
 
   &__service {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 35px;
+    gap: 20px;
 
     cursor: pointer;
 
+    &-tile {
+      margin-top: 35px;
+    }
+
     &-text {
       width: 200px;
+      max-height: 100px;
 
       font-family: $body-font-family;
       font-style: normal;
@@ -139,8 +151,8 @@ export default {
   }
 }
 
-@media (max-device-width: 1000px) {
-  .page__wrapper {
+@media (max-width: 550px) {
+  .page__bg {
     background-image: none;
     background-color: $style_black;
     overflow-y: auto;
