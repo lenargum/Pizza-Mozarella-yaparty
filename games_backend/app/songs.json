@@ -1,0 +1,17 @@
+[
+  {
+    "name": "777",
+    "path": "./songs/777.mp3",
+    "author": "Joji"
+  },
+  {
+    "name": "Technologic",
+    "path": "./songs/technologic.mp3",
+    "author": "Daft Punk"
+  },
+  {
+    "name": "Гуф умер",
+    "path": "./songs/guf.mp3",
+    "author": "Guf"
+  }
+]

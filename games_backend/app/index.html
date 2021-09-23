@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DevKit</title>
+</head>
+<body>
+<h1>WebSocket DevKit</h1>
+<form action="" onsubmit="sendMessage(event)">
+    <label>Room: <input type="text" id="room" autocomplete="off" value="foo"/></label>
+    <label>Token: <input type="text" id="token" autocomplete="off" value="some-key-token"/></label>
+    <button onclick="connect(event)">Connect</button>
+    <button onclick="connectD(event)">Connect Desktop</button>
+    <hr>
+    <button onclick="player(event)">Player</button>
+    <button onclick="judge(event)">Judge</button>
+    <hr>
+    <button onclick="start(event)">Start</button>
+    <hr>
+    <button onclick="answer(event)">Answer</button>
+    <hr>
+    <button onclick="da(event)">DA</button>
+    <button onclick="net(event)">NET</button>
+    <hr>
+    <button onclick="next(event)">Next</button>
+    <hr>
+    <label>Message: <input type="text" id="messageText" autocomplete="off"/></label>
+    <button>Send</button>
+</form>
+<ul id='messages'>
+</ul>
+<script>
+  var ws = null;
+  var session_id = null;
+
+  function connectD(event) {
+    if (ws !== null) {
+      event.preventDefault()
+      return
+    }
+    var room = document.getElementById("room")
+    var path = window.location.hostname
+    var port = window.location.port
+    session_id = room.value
+    ws = new WebSocket("ws://" + path + ":" + port + "/ws/" + room.value + "/desktop");
+    ws.onmessage = function (event) {
+      console.log(event.data)
+      var messages = document.getElementById('messages')
+      var message = document.createElement('li')
+      var content = document.createTextNode(event.data)
+      message.appendChild(content)
+      messages.appendChild(message)
+    };
+    event.preventDefault()
+  }
+
+  function connect(event) {
+    if (ws !== null) {
+      event.preventDefault()
+      return
+    }
+    var room = document.getElementById("room")
+    var token = document.getElementById("token")
+    var path = window.location.hostname
+    var port = window.location.port
+    session_id = room.value
+    ws = new WebSocket("ws://" + path + ":" + port + "/ws/" + room.value + "/connect?token=" + token.value);
+    ws.onmessage = function (event) {
+      console.log(event.data)
+      var messages = document.getElementById('messages')
+      var message = document.createElement('li')
+      var content = document.createTextNode(event.data)
+      message.appendChild(content)
+      messages.appendChild(message)
+    };
+    event.preventDefault()
+  }
+
+  function judge(event) {
+    var data_json = {"room_id": session_id, "event_type": 2, "payload": {"update_role": true}};
+    ws.send(JSON.stringify(data_json))
+    event.preventDefault()
+  }
+
+  function player(event) {
+    event.preventDefault()
+  }
+
+  function start(event) {
+    var data_json = {"room_id": session_id, "event_type": 1, "payload": {}};
+    ws.send(JSON.stringify(data_json))
+    event.preventDefault()
+  }
+
+  function answer(event) {
+    var data_json = {
+      "room_id": session_id, "event_type": 2, "payload": {
+        "event": "answer"
+      }
+    };
+    ws.send(JSON.stringify(data_json))
+    event.preventDefault()
+  }
+
+  function next(event) {
+    var data_json = {
+      "room_id": session_id, "event_type": 2, "payload": {
+        "event": "next"
+      }
+    };
+    ws.send(JSON.stringify(data_json))
+    event.preventDefault()
+  }
+
+  function da(event) {
+    var data_json = {
+      "room_id": session_id, "event_type": 2, "payload": {
+        "answer_correct": true
+      }
+    };
+    ws.send(JSON.stringify(data_json))
+    event.preventDefault()
+  }
+
+  function net(event) {
+    var data_json = {
+      "room_id": session_id, "event_type": 2, "payload": {
+        "answer_correct": false
+      }
+    };
+    ws.send(JSON.stringify(data_json))
+    event.preventDefault()
+  }
+
+  function sendMessage(event) {
+    var input = document.getElementById("messageText")
+    var data_json = {
+      "room_id": session_id, "event_type": 2, "payload": {
+        "answer": input.value
+      }
+    };
+    ws.send(JSON.stringify(data_json))
+    input.value = ''
+    event.preventDefault()
+  }
+</script>
+</body>
+</html>
