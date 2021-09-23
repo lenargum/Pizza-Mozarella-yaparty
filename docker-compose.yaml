@@ -1,19 +1,19 @@
 version: "3"
 services:
-  auth_server:
-    image: auth-server
-    build:
-      context: PartyRecomender/auth_server/
-    container_name: auth_server
-    ports:
-      - "5000:5000"
-  rec_sys:
-    image: rec-sys
-    build:
-      context: PartyRecomender/recommender/
-    container_name: rec_sys
-    ports:
-      - "8000:8000"
+#  auth_server:
+  #    image: auth-server
+  #    build:
+  #      context: PartyRecomender/auth_server/
+  #    container_name: auth_server
+  #    ports:
+  #      - "5000:5000"
+  #  rec_sys:
+  #    image: rec-sys
+  #    build:
+  #      context: PartyRecomender/recommender/
+  #    container_name: rec_sys
+  #    ports:
+  #      - "8000:8000"
   partygames:
     image: partygames
     build:
