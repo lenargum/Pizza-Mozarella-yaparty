@@ -20,7 +20,7 @@ services:
       context: games_backend/
     container_name: partygames
     ports:
-      - "4000:8000"
+      - "8000:8000"
 
 volumes:
   dbdata:
