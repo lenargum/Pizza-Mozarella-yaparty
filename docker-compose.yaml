@@ -1,17 +1,23 @@
 version: "3"
 services:
   auth_server:
-    image: cr.yandex/crp5snaimmone8dg87ir/auth-server
+    image: auth-server
+    build:
+      context: PartyRecomender/auth_server/
     container_name: auth_server
     ports:
       - "5000:5000"
   rec_sys:
-    image: cr.yandex/crp5snaimmone8dg87ir/rec-sys
+    image: rec-sys
+    build:
+      context: PartyRecomender/recommender/
     container_name: rec_sys
     ports:
       - "8000:8000"
   partygames:
-    image: cr.yandex/crp5snaimmone8dg87ir/partygames
+    image: partygames
+    build:
+      context: games_backend/
     container_name: partygames
     ports:
       - "4000:8000"
