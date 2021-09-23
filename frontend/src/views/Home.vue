@@ -14,7 +14,7 @@
           </span>
           </div>
 
-          <div @click="roomId? $router.push('/playlist/'+roomId) : navigateToCreateRoom()" class="page__service">
+          <div @click="navigateToPlaylist" class="page__service">
             <Tile class="page__service-tile" :hoverable="true" :label="'Плейлист вечеринки'" :img="'party-playlist'"
                   :tile-color="'#6DAAE8'"/>
             <span class="page__service-text">
@@ -67,6 +67,14 @@ export default {
     },
     navigateToCreateRoom() {
       this.$router.push('/create/room');
+    },
+    navigateToPlaylist() {
+      // if (this.roomId) {
+      //   this.$router.push('/playlist/'+this.roomId);
+      // } else {
+      //   this.navigateToCreateRoom();
+      // }
+      this.navigateToStub();
     }
   },
   mounted() {
