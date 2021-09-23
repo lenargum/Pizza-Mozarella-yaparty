@@ -1,0 +1,21 @@
+version: "3"
+services:
+  auth_server:
+    image: cr.yandex/crp5snaimmone8dg87ir/auth-server
+    container_name: auth_server
+    ports:
+      - "5000:5000"
+  rec_sys:
+    image: cr.yandex/crp5snaimmone8dg87ir/rec-sys
+    container_name: rec_sys
+    ports:
+      - "8000:8000"
+  partygames:
+    image: cr.yandex/crp5snaimmone8dg87ir/partygames
+    container_name: partygames
+    ports:
+      - "4000:8000"
+
+volumes:
+  dbdata:
+    driver: local
