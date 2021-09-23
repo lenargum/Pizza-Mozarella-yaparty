@@ -1,5 +1,5 @@
 const server = {
-    hostname: "127.0.0.1",
+    hostname: "77.223.97.235",
     port: "8000"
 };
 
