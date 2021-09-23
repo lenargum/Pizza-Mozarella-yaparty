@@ -258,6 +258,8 @@ export default {
 
       this.WS.onerror = (error) => {
         console.error(error);
+        console.log("WS:");
+        console.log(this.WS);
         this.$router.push('/games/guess-the-melody');
       };
 
@@ -310,6 +312,8 @@ export default {
 
         this.WS.onerror = (error) => {
           console.error(error);
+          console.log("WS:");
+          console.log(this.WS);
           this.$router.push('/games/guess-the-melody');
         };
 
