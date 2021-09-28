@@ -52,8 +52,15 @@ export default {
 }
 
 @media (max-width: 500px) {
-  .users__label {
-    display: none;
+  .users {
+    &__label {
+      display: none;
+    }
+
+    &__wrapper {
+      top: 50px;
+    }
   }
+
 }
 </style>
