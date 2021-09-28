@@ -7,7 +7,7 @@ import Home from "@/views/Home";
 import Stub from "@/views/Stub";
 import GamesWrapper from "@/views/GamesWrapper";
 import GamesLibrary from "@/views/Games/GamesLibrary";
-import GuessTheMelody from "@/views/Games/Game/GuessTheMelody";
+import GuessTheMelody from "@/views/Games/GuessTheMelody/GuessTheMelody";
 import Playlist from "@/views/Playlist";
 
 

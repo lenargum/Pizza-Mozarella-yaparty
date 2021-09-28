@@ -85,7 +85,7 @@ import BigFab from "@/components/BigFab";
 import SmallFab from "@/components/SmallFab";
 import FlipCard from "@/components/FlipCard";
 import WaitingLoader from "@/components/WaitingLoader";
-import States from "@/views/Games/Game/Shared/States";
+import States from "@/views/Games/GuessTheMelody/Common/States";
 
 export default {
   name: "Judge",

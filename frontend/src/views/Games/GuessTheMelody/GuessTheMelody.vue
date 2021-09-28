@@ -122,11 +122,11 @@ import BigFab from "@/components/BigFab";
 import QRCode from "@/components/QRCode";
 
 import server from "@/data/hosts";
-import States from "@/views/Games/Game/Shared/States";
+import States from "@/views/Games/GuessTheMelody/Common/States";
 
-import Player from "@/views/Games/Game/Player";
-import Judge from "@/views/Games/Game/Judge";
-import LeaderBoard from "@/views/Games/Game/LeaderBoard";
+import Player from "@/views/Games/GuessTheMelody/Player";
+import Judge from "@/views/Games/GuessTheMelody/Judge";
+import LeaderBoard from "@/views/Games/GuessTheMelody/LeaderBoard";
 import MusicPlayer from "@/components/MusicPlayer";
 
 export default {
@@ -183,30 +183,26 @@ export default {
     scoreboard: undefined,
   }),
   methods: {
-    // COMMON
     userConnected(user) {
       console.log("USER CONNECTED: " + "'" + user + "'");
       let temp_users = this.users;
       temp_users.push(user);
-      this.users = temp_users;
+      this.setUsers(temp_users);
     },
     userDisconnected(user) {
       console.log("USER DISCONNECTED: " + "'" + user + "'");
       let temp_users = this.users;
       temp_users.splice(temp_users.indexOf(user), 1);
 
-      this.users = temp_users;
+      this.setUsers(temp_users);
 
       if (this.judge === user) {
         this.setJudge('');
       }
     },
 
-    // ROLE
-
 
     // SETTERS
-    // todo: replace all assignments with setters
     setJudge(user) {
       if (user) {
         console.log("USER '" + user + "' IS JUDGE");
@@ -369,10 +365,10 @@ export default {
                 break;
             }
           } else if ("song" in payload && "answer" in payload && "answer_correct" in payload) {
-            this.playerState = States.Player.WAITED;
+            this.setPlayerState(States.Player.WAITED);
             this.song = payload.song;
             this.givenAnswer = payload.answer;
-            setTimeout(() => (this.answerIsCorrect = payload.answer_correct), 3000);
+            setTimeout(() => (this.setAnswerIsCorrect(payload.answer_correct)), 3000);
           } else if ("score_board" in payload) {
             this.scoreboard = payload.score_board.map((line) => ({username: line[0], score: line[1]}));
             this.scoreboard = this.scoreboard.filter((record) => (record.username !== this.judge));
@@ -391,10 +387,10 @@ export default {
                 this.givenAnswer = "";
                 if (this.judge !== this.username && !this.started && !this.host) this.score = "0";
                 this.song = {};
-                this.answerIsCorrect = undefined;
+                this.setAnswerIsCorrect(undefined);
 
-                this.playerState = States.Player.READY;
-                this.judgeState = States.Judge.READY;
+                this.setPlayerState(States.Player.READY);
+                this.setJudgeState(States.Judge.READY);
                 this.started = true;
                 break;
               case "answer":
@@ -404,16 +400,16 @@ export default {
                     this.setMusicIsPlaying(false);
                   }
                   if (this.username === this.answeringPlayer) {
-                    this.playerState = States.Player.ANSWERING;
+                    this.setPlayerState(States.Player.ANSWERING);
                   } else {
-                    this.playerState = States.Player.WAITING;
+                    this.setPlayerState(States.Player.WAITING);
                   }
-                  this.judgeState = States.Judge.ANSWERING;
+                  this.setJudgeState(States.Judge.ANSWERING);
                 }
                 break;
             }
           } else if ("answer_correct" in payload && "song" in payload && "answer" in payload && "score" in payload) {
-            this.playerState = States.Player.ANSWERED;
+            this.setPlayerState(States.Player.ANSWERED);
             this.song = payload.song;
             this.givenAnswer = payload.answer;
             setTimeout(() => (this.score = payload.score.toString()), 3000);
@@ -421,8 +417,8 @@ export default {
           } else if ("answer" in payload && "song" in payload) {
             this.givenAnswer = payload.answer;
             this.song = payload.song;
-            this.judgeState = States.Judge.CHECKING;
-            this.playerState = States.Player.WAITING;
+            this.setJudgeState(States.Judge.CHECKING);
+            this.setPlayerState(States.Player.WAITING);
             // todo: consider no-judge game mode
           } else if ("song64" in payload) {
             if (!this.started) {
@@ -459,7 +455,5 @@ export default {
     max-width: 100%;
     position: relative;
   }
-
-
 }
 </style>

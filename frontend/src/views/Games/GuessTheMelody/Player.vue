@@ -111,7 +111,7 @@ import BigFab from "@/components/BigFab";
 import SmallFab from "@/components/SmallFab";
 import TextField from "@/components/TextField";
 import FlipCard from "@/components/FlipCard";
-import States from "@/views/Games/Game/Shared/States";
+import States from "@/views/Games/GuessTheMelody/Common/States";
 import WaitingLoader from "@/components/WaitingLoader";
 
 export default {
